@@ -2,6 +2,7 @@ package assignment;
 
 import java.util.Scanner;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class User {
     // data properties
@@ -62,21 +63,55 @@ public class User {
     }
     
     // other methods
-    public static User register(){
+    public static User register(List<User> userList){
         Scanner sc = new Scanner(System.in);
         
-        System.out.print("Enter username: ");
-        String username = sc.nextLine();
+        String username;
+        String password;
+        String email;
+        String role;
         
-        System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        while (true) {
+            System.out.print("Enter username: ");
+            username = sc.nextLine();
+            if (!isValidUsername(username)){
+                System.out.println("Username must be between 6-30 characters long.");
+            } else if (userExists(username, userList)) {
+                System.out.println("Username already exists. Please choose another.");
+            } else {
+                break;
+            }
+        }
         
-        System.out.print("Enter email: ");
-        String email = sc.nextLine();
+        while (true){
+            System.out.print("Enter password (min 8 characters): ");
+            password = sc.nextLine();
+            if(!isValidPassword(password)){
+                System.out.println("Password must be between 8-16 characters long.");
+            } else {
+                break;
+            }
+        }
         
-        System.out.print("Enter role (admin/customer): ");
-        String role = sc.nextLine().trim().toLowerCase();
-        
+        while (true){
+            System.out.print("Enter email: ");
+            email = sc.nextLine();
+            if (!isValidEmail (email)){
+                System.out.println("Invalid email format. Please enter a valid email."); 
+            } else {
+                break; 
+            }
+        }
+       
+        while (true) {
+            System.out.print("Enter role (admin/customer): ");
+            role = sc.nextLine().trim().toLowerCase();
+            if (role.equals("admin") || role.equals("customer")){
+                break;
+            } else{
+                System.out.println("Invalid role. Please choose 'admin' or 'customer'. ");
+            }
+        }
         User newUser;
         
         if (role.equals("admin")){
@@ -85,6 +120,7 @@ public class User {
             newUser = new Customer(username, password, email);
         }
         
+        userList.add(newUser);
         System.out.println("User registered successfully: " + newUser);
         return newUser;
     }
@@ -104,6 +140,9 @@ public class User {
                     System.out.println("Login successful! Welcome, " + user.getUsername()
                                         + " (" + user.getRole() +")");
                     return user;
+            } else {
+                System.out.println("Invalid password.");
+                return null;
             }
         }
         
@@ -111,9 +150,75 @@ public class User {
         return null;
     }
     public void updateProfile(){
+        Scanner sc = new Scanner(System.in);
         
+        System.out.println("Updating profile for user: " + this.username);
+        
+        //Update username
+        System.out.println("Enter new username: ");
+        String newUsername = sc.nextLine();
+        if (!newUsername.isEmpty()){
+            if(!isValidUsername(newUsername)){
+                System.out.println("Password must be between 6-30 characters long.");
+            } else {
+                this.username = newUsername;
+                System.out.println("Username update to: " + this.username);   
+            }
+        }
+        
+        //Update password
+        System.out.println("Enter new password: ");
+        String newPassword = sc.nextLine();
+        if(!newPassword.isEmpty()){
+            if(!isValidPassword(newPassword)){
+                System.out.println("Password must be between 8-16 characters long.");
+            } else {            
+                this.password = newPassword;
+                System.out.println("Password updated");
+            }
+        }
+        
+        //Update email
+        System.out.println("Enter new email: ");
+        String newEmail = sc.nextLine();
+        if(!newEmail.isEmpty()){
+            if (!isValidEmail(newEmail)){
+                System.out.println("Invalid email format. Please enter a valid email."); 
+            } else {
+            this.email = newEmail;
+            System.out.println("Email update to: " + this.email);
+            }
+        }
+        
+        System.out.println("Profile updated successfully.");
     }
     public void deactivateAccount(){
         
     }
+    
+    private static boolean userExists(String username, List<User> userList){
+        for (User user : userList){
+            if (user.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //email validation
+    private static boolean isValidEmail(String email){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+    
+    //password validation
+    private static boolean isValidPassword(String password){
+        return password.length() >= 8 && password.length() <= 16;
+    }
+    
+    private static boolean isValidUsername(String username){
+        return username.length() >= 6 && username.length() <= 30;
+    }
+    
 }
