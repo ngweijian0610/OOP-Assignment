@@ -7,13 +7,23 @@ public class Admin extends User {
     
     // methods
     public Admin(){
-        this(" ", 0);
+        super();
+        this.adminID = "";
+        this.privilegeLevel = 0;
+        this.role = "admin";
     }
-    public Admin(String adminID, int privilegeLevel){
+    
+    public Admin(String username, String password, String email, String adminID, int privilegeLevel){
+        super(username, password, email, "admin");
         this.adminID = adminID;
         this.privilegeLevel = privilegeLevel;
     }
     
+    public Admin(String username, String password, String email){
+        super(username, password, email, "admin");
+        this.adminID = "";
+        this.privilegeLevel = 0;
+    }
     // getter
     public String getAdminID(){
         return adminID;
@@ -23,10 +33,10 @@ public class Admin extends User {
     }
     
     // setter
-    public void setAdminID(){
+    public void setAdminID(String adminID){
         this.adminID = adminID;
     }
-    public void setPrivilegeLevel(){
+    public void setPrivilegeLevel(int privilegeLevel){
         this.privilegeLevel = privilegeLevel;
     }
     
