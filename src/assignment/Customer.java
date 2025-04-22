@@ -7,7 +7,19 @@ public class Customer extends User {
     
     // methods
     public Customer(){
-        
+        super();
+        this.customerID = "";
+        this.role = "customer";
+    }
+    
+    public Customer(String username, String password, String email, String customerID){
+        super(username, password, email, "customer");
+        this.customerID = customerID;
+    }
+    
+    public Customer(String username, String password, String email){
+        super(username, password, email, "customer");
+        this.customerID = "";
     }
     
     // getter
@@ -16,7 +28,7 @@ public class Customer extends User {
     }
     
     // setter
-    public void setCustomerID(){
+    public void setCustomerID(String customerID){
         this.customerID = customerID;
     }
 }
