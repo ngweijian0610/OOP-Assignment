@@ -7,19 +7,19 @@ public class Product {
     private String productDescription;
     private double price;
     private String category;
-    private int warrantyPeriod;
+    private int warrantyMonths;
     
     // methods
     public Product(){
         this(" ", " ", " ", 0.0, " ", 0);
     }
-    public Product(String productID, String productName, String productDescription, double price, String category, int warrantyPeriod){
+    public Product(String productID, String productName, String productDescription, double price, String category, int warrantyMonths){
         this.productID = productID;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
         this.category = category;
-        this.warrantyPeriod = warrantyPeriod;
+        this.warrantyMonths = warrantyMonths;
     }
     
     // getter
@@ -38,8 +38,8 @@ public class Product {
     public String getCategory(){
         return category;
     }
-    public int getWarrantyPeriod(){
-        return warrantyPeriod;
+    public int getWarrantyMonths(){
+        return warrantyMonths;
     }
     
     // setter
@@ -58,10 +58,23 @@ public class Product {
     public void setCategory(String category){
         this.category = category;
     }
-    public void setWarrantyPeriod(int warrantyPeriod){
-        this.warrantyPeriod = warrantyPeriod;
+    public void setWarrantyMonths(int warrantyMonths){
+        this.warrantyMonths = warrantyMonths;
     }
     
     // other methods
+    public String toString(){
+        return  "Product ID: " + productID +
+                "\nProduct Name: " + productName +
+                "\nDescription: " + productDescription +
+                "\nPrice: RM " + String.format("%.2f", price) +
+                "\nCategory: " + category +
+                "\nWarranty Months: " + warrantyMonths + "months";
+    }
     
+    public void applyDiscount(double percentage) {
+        if (percentage > 0 && percentage <= 100) {
+            this.price = this.price - (this.price * percentage / 100);
+        }
+}
 }

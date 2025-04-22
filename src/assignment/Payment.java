@@ -1,21 +1,24 @@
 package assignment;
 
+import java.time.LocalDate;
+
+
 public class Payment {
     // data properties
     private String paymentID;
     private double paidAmount;
-    private String paymentDate;
+    private LocalDate paymentDate;
     private String paymentStatus;
     private String paymentMethod;
     
     // methods
     public Payment(){
-        this(" ", 0.0, " ", " ", " ");
+        this(" ", 0.0, " ", " ");
     }
-    public Payment(String paymentID, double paidAmount, String paymentDate, String paymentStatus, String paymentMethod){
+    public Payment(String paymentID, double paidAmount, String paymentStatus, String paymentMethod){
         this.paymentID = paymentID;
         this.paidAmount = paidAmount;
-        this.paymentDate = paymentDate;
+        this.paymentDate = new Date();
         this.paymentStatus = paymentStatus;
         this.paymentMethod = paymentMethod;
     }
@@ -27,7 +30,7 @@ public class Payment {
     public double getPaidAmount(){
         return paidAmount;
     }
-    public String getPaymentDate(){
+    public Date getPaymentDate(){
         return paymentDate;  // for now liddat gua mcm got Date de datatype
     }
     public String getPaymentStatus(){
@@ -43,9 +46,6 @@ public class Payment {
     }
     public void setPaidAmount(double paidAmount){
         this.paidAmount = paidAmount;
-    }
-    public void setPaymentDate(String paymentDate){
-        this.paymentDate = paymentDate;
     }
     public void setPaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;
