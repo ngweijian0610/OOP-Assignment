@@ -10,6 +10,7 @@ public class User {
     protected String password;
     protected String email;
     protected String role;
+    protected boolean isActive;
     
     // methods
     public User(){
@@ -20,6 +21,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.isActive = true;
     }
     
     // getter
@@ -36,6 +38,10 @@ public class User {
         return role;
     }
     
+    public boolean isActive(){
+        return isActive;
+    }
+    
     // setter
     public void setUsername(String username){
         this.username = username;
@@ -50,6 +56,10 @@ public class User {
         this.role = role;
     }
     
+    public void setActive(boolean active){
+        this.isActive = active;
+    }
+    
     public boolean isAdmin(){
         return role.equalsIgnoreCase("admin");
     }
@@ -59,10 +69,28 @@ public class User {
                "username='" + username + '\'' +
                ", email='" + email + '\'' +
                ", role='" + role + '\'' +
+               ", active='" + isActive + '\'' +
                '}';
     }
     
-    // other methods
+    //validation
+    //email validation
+    private static boolean isValidEmail(String email){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+    
+    //password validation
+    private static boolean isValidPassword(String password){
+        return password.length() >= 8 && password.length() <= 16;
+    }
+    
+    private static boolean isValidUsername(String username){
+        return username.length() >= 6 && username.length() <= 30;
+    }
+    
+    //register
     public static User register(List<User> userList){
         Scanner sc = new Scanner(System.in);
         
@@ -125,6 +153,7 @@ public class User {
         return newUser;
     }
     
+    //login
     public static User login(List<User> userList){
         Scanner sc = new Scanner(System.in);
         
@@ -192,8 +221,19 @@ public class User {
         
         System.out.println("Profile updated successfully.");
     }
+    
+    //deactivate account
     public void deactivateAccount(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Are you sure you want to deactivate your account? (yes/no): ");
+        String choice = sc.nextLine().trim().toLowerCase();
         
+        if(choice.equals("yes")){
+            this.isActive = false;
+            System.out.println("Your account has been deactivated.");
+        } else {
+            System.out.println("Account deactivation cancelled.");
+        }
     }
     
     private static boolean userExists(String username, List<User> userList){
@@ -204,21 +244,4 @@ public class User {
         }
         return false;
     }
-    
-    //email validation
-    private static boolean isValidEmail(String email){
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
-    }
-    
-    //password validation
-    private static boolean isValidPassword(String password){
-        return password.length() >= 8 && password.length() <= 16;
-    }
-    
-    private static boolean isValidUsername(String username){
-        return username.length() >= 6 && username.length() <= 30;
-    }
-    
 }
