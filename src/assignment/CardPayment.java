@@ -11,7 +11,7 @@ public class CardPayment extends Payment {
     
     // constructors
     public CardPayment(){
-        this(" ", 0.0, " ", " ", " ", " ");
+        this(" ", 0.0, " ", " ", " ", LocalDate.now().plusYears(1));
     }
     public CardPayment(String paymentID, double amount, 
             String cardHolderName, String cardNumber, String cvv, LocalDate expiryDate){
@@ -27,8 +27,12 @@ public class CardPayment extends Payment {
         return cardHolderName;
     }
     public String getCardNumber() {
-        return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
+        return cardNumber;
     }
+    // dk wan bo
+//    public String getMaskedCardNumber(){
+//        return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
+//    }
     public String getCVV(){
         return cvv;
     }
@@ -65,5 +69,13 @@ public class CardPayment extends Payment {
         } else {
             this.paymentStatus = "Failed";
         }
+    }
+    
+    public String toString() {
+        return super.toString() +
+               "\nCard Holder Name: " + cardHolderName +
+               "\nCard Number: " + cardNumber;
+               "\nCVV: " + cvv;
+               "\nExpiry Date: "
     }
 }
