@@ -61,7 +61,7 @@ public abstract class Payment {
         this.paymentStatus = "Refunded";
     }
     
-    public String getSummary() {
+    public String toString() {
         return "Payment ID: " + paymentID +
                "\nAmount: RM" + amount +
                "\nMethod: " + getPaymentType() +
