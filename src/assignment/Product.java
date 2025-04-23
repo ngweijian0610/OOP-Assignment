@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Product {
     // data properties
-    private String productID;
+    private final String productID;
     private String productName;
     private String productDescription;
     private double price;
@@ -12,10 +12,10 @@ public class Product {
     private int warrantyMonths;
     
     public Product(){
-        this(" ", " ", " ", 0.0, " ", 0);
+        this(" ", " ", 0.0, " ", 0);
     }
-    public Product(String productID, String productName, String productDescription, double price, String category, int warrantyMonths){
-        this.productID = productID;
+    public Product(String productName, String productDescription, double price, String category, int warrantyMonths){
+        this.productID = IDGenerator.generate("PRO");
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
@@ -44,10 +44,6 @@ public class Product {
     }
     
     // setter
-    public void setProductID(String productID){
-        this.productID = productID;
-    }
-    
     public void setProductName(String productName){
         this.productName = productName;
     }
