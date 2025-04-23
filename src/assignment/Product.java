@@ -11,7 +11,6 @@ public class Product {
     private String category;
     private int warrantyMonths;
     
-    // Constructor
     public Product(){
         this(" ", " ", " ", 0.0, " ", 0);
     }

@@ -6,7 +6,7 @@ public class Admin extends User {
     private int privilegeLevel;
     private static int counter = 1;
     
-    // methods
+    // constructors
     public Admin(){
         super();
         this.adminID = "";

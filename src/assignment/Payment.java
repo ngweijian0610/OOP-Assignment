@@ -2,58 +2,70 @@ package assignment;
 
 import java.time.LocalDate;
 
-
-public class Payment {
+public abstract class Payment {
     // data properties
-    private String paymentID;
-    private double paidAmount;
-    private LocalDate paymentDate;
-    private String paymentStatus;
-    private String paymentMethod;
+    protected String paymentID;
+    protected double amount;
+    protected String paymentStatus;
+    protected LocalDate paymentDate;
     
-    // methods
-    public Payment(){
-        this(" ", 0.0, " ", " ");
+    // constructors
+    protected Payment(){
+        this(" ", 0.0);
     }
-    public Payment(String paymentID, double paidAmount, String paymentStatus, String paymentMethod){
+    protected Payment(String paymentID, double amount){
         this.paymentID = paymentID;
-        this.paidAmount = paidAmount;
-        this.paymentDate = new Date();
-        this.paymentStatus = paymentStatus;
-        this.paymentMethod = paymentMethod;
+        this.amount = amount;
+        this.paymentStatus = "Pending";
+        this.paymentDate = LocalDate.now();
     }
     
     // getter
     public String getPaymentID(){
         return paymentID;
     }
-    public double getPaidAmount(){
-        return paidAmount;
-    }
-    public Date getPaymentDate(){
-        return paymentDate;  // for now liddat gua mcm got Date de datatype
+    public double getAmount(){
+        return amount;
     }
     public String getPaymentStatus(){
         return paymentStatus;
     }
-    public String getPaymentMethod(){
-        return paymentMethod;
+    public LocalDate getPaymentDate(){
+        return paymentDate;
     }
     
     // setter
     public void setPaymentID(String paymentID){
         this.paymentID = paymentID;
     }
-    public void setPaidAmount(double paidAmount){
-        this.paidAmount = paidAmount;
+    public void setAmount(double amount){
+        this.amount = amount;
     }
     public void setPaymentStatus(String paymentStatus){
         this.paymentStatus = paymentStatus;
     }
-    public void setPaymentMethod(String paymentMethod){
-        this.paymentMethod = paymentMethod;
-    }
     
     // other methods
+    public abstract String getPaymentType();
     
+    public void processPayment() {
+        if (this.amount > 0) {
+            this.paymentStatus = "Success";
+        } else {
+            this.paymentStatus = "Failed";
+        }
+    }
+    
+    public void refund() {
+        this.amount = 0.0;
+        this.paymentStatus = "Refunded";
+    }
+    
+    public String toString() {
+        return "Payment ID: " + paymentID +
+               "\nAmount: RM" + amount +
+               "\nMethod: " + getPaymentType() +
+               "\nStatus: " + paymentStatus +
+               "\nDate: " + paymentDate;
+    }
 }

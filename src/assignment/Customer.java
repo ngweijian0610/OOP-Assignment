@@ -18,7 +18,7 @@ public class Customer extends User {
         this.customerID = customerID;
         this.cart = new Cart();
     }
-    
+     
     private String generateCustomerID(){
         return "C" + String.format("%04d", counter++);
     }
