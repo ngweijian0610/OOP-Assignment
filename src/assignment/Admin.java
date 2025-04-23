@@ -4,6 +4,7 @@ public class Admin extends User {
     // data properties
     private String adminID;
     private int privilegeLevel;
+    private static int counter = 1;
     
     // methods
     public Admin(){
@@ -13,17 +14,22 @@ public class Admin extends User {
         this.role = "admin";
     }
     
+     public Admin(String username, String password, String email){
+        super(username, password, email, "admin");
+        this.adminID = generateAdminID();
+        this.privilegeLevel = 1;
+    }
+     
     public Admin(String username, String password, String email, String adminID, int privilegeLevel){
         super(username, password, email, "admin");
-        this.adminID = adminID;
+        this.adminID = generateAdminID();
         this.privilegeLevel = privilegeLevel;
     }
     
-    public Admin(String username, String password, String email){
-        super(username, password, email, "admin");
-        this.adminID = "";
-        this.privilegeLevel = 0;
+    private String generateAdminID(){
+        return "A" + String.format("%04d", counter++);
     }
+    
     // getter
     public String getAdminID(){
         return adminID;
@@ -61,5 +67,12 @@ public class Admin extends User {
     }
     public void manageUser(){
         
+    }
+    
+    @Override
+    public String toString(){
+        return super.toString() +
+                ", adminID='" + adminID + '\'' +
+                ", privilegeLevel=" + privilegeLevel;
     }
 }

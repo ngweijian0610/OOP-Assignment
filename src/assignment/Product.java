@@ -1,5 +1,7 @@
 package assignment;
 
+import java.util.Objects;
+
 public class Product {
     // data properties
     private String productID;
@@ -9,7 +11,7 @@ public class Product {
     private String category;
     private int warrantyMonths;
     
-    // methods
+    // Constructor
     public Product(){
         this(" ", " ", " ", 0.0, " ", 0);
     }
@@ -46,23 +48,37 @@ public class Product {
     public void setProductID(String productID){
         this.productID = productID;
     }
+    
     public void setProductName(String productName){
         this.productName = productName;
     }
+    
     public void setProductDescription(String productDescription){
         this.productDescription = productDescription;
     }
+    
     public void setPrice(double price){
+        if (price >= 0){
         this.price = price;
+        } else {
+            System.out.println("Price cannot be negative.");
+        }
     }
+    
     public void setCategory(String category){
         this.category = category;
     }
+    
     public void setWarrantyMonths(int warrantyMonths){
-        this.warrantyMonths = warrantyMonths;
+        if (warrantyMonths >= 0) {
+            this.warrantyMonths = warrantyMonths;
+        } else {
+            System.out.println("Warranty months cannot be negative.");
+        }
     }
     
     // other methods
+    @Override
     public String toString(){
         return  "Product ID: " + productID +
                 "\nProduct Name: " + productName +
@@ -75,6 +91,21 @@ public class Product {
     public void applyDiscount(double percentage) {
         if (percentage > 0 && percentage <= 100) {
             this.price = this.price - (this.price * percentage / 100);
+        } else {
+            System.out.println("Invalid discount percentage. Must be between 0 and 100.");
         }
-}
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        Product product = (Product) obj;
+        return Objects.equals(productID, product.productID);
+    }
+    
+    @Override
+    public int hashCode(){
+        return Objects.hash(productID);
+    }
 }

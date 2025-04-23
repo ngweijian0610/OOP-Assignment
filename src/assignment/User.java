@@ -64,6 +64,7 @@ public class User {
         return role.equalsIgnoreCase("admin");
     }
     
+    @Override
     public String toString() {
         return "User{" +
                "username='" + username + '\'' +
