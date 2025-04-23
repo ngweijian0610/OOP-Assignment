@@ -5,7 +5,7 @@ public class Admin extends User {
     private String adminID;
     private int privilegeLevel;
     
-    // methods
+    // constructors
     public Admin(){
         super();
         this.adminID = "";

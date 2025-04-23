@@ -12,7 +12,7 @@ public class User {
     protected String role;
     protected boolean isActive;
     
-    // methods
+    // constructors
     public User(){
         this(" ", " ", " ", " ");
     }
