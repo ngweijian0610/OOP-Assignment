@@ -5,7 +5,7 @@ public class Customer extends User {
     private String customerID;
 //  private Cart cart;
     
-    // methods
+    // constructors
     public Customer(){
         super();
         this.customerID = "";

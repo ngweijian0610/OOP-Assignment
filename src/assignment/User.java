@@ -11,7 +11,7 @@ public class User {
     protected String email;
     protected String role;
     
-    // methods
+    // constructors
     public User(){
         this(" ", " ", " ", " ");
     }

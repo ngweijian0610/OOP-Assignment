@@ -9,7 +9,7 @@ public class Product {
     private String category;
     private int warrantyMonths;
     
-    // methods
+    // constructors
     public Product(){
         this(" ", " ", " ", 0.0, " ", 0);
     }
