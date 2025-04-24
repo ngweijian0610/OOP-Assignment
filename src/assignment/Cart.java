@@ -46,22 +46,20 @@ public class Cart {
     
     // View cart contents
     public void viewCart(){
-        if(items.isEmpty()){
+        if(items.isEmpty())
             System.out.println("Your cart is empty.");
-        } else{
+        else {
             System.out.println("Items in your cart:");
-            for(CartItem item : items){
+            for(CartItem item : items)
                 System.out.println("- " + item);
-            }
             System.out.println("Total: RM" + String.format("%.2f",getTotal()));
         }
     }
     
     public double getTotal(){
         double total = 0;
-        for (CartItem item : items){
+        for (CartItem item : items)
             total += item.getTotalPrice();
-        }
         return total;
     }
     
