@@ -1,12 +1,17 @@
 package assignment;
 
+import java.util.*;
 public class Customer extends User {
     // data properties
     private String customerID;
     private Cart cart;
     private static int counter = 1;
+    private List<User> userList = new ArrayList<>();
     
-    // Constructor
+    public Customer(){
+        super();
+    }
+    // Constructor for register
      public Customer(String username, String password, String email){
         super(username, password, email, "customer");
         this.customerID = generateCustomerID();
@@ -30,6 +35,10 @@ public class Customer extends User {
     
     public Cart getCart(){
         return cart;
+    }
+    
+    public List<User> getUserList(){
+        return userList;
     }
     
     // setter
@@ -56,8 +65,12 @@ public class Customer extends User {
     public void checkout(){
         System.out.println("Chcking out...");
         cart.viewCart();
-        System.out.println("Thank you for your purchasem, " + username + "!");
+        System.out.println("Thank you for your purchase, " + username + "!");
         cart.clearCart();
+    }
+    
+    public void register(){
+        super.register(userList);
     }
     
     @Override
