@@ -23,7 +23,7 @@ public class Customer extends User {
         this.customerID = customerID;
         this.cart = new Cart();
     }
-     
+    
     private String generateCustomerID(){
         return "C" + String.format("%04d", counter++);
     }
@@ -69,17 +69,80 @@ public class Customer extends User {
         cart.clearCart();
     }
     
-    public void register(){
-        super.register(userList);
+    public void UserAuthentication(){
+        int choice;
+        Scanner scanner = new Scanner(System.in);
+        
+        do {            
+            DisplayEffect.drawLine();
+            System.out.println("    Welcome to Computer Retail System    ");
+            DisplayEffect.drawLine();
+            System.out.println("1. Login");
+            System.out.println("2. Register");
+            System.out.println("3. Exit");
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextInt();
+            DisplayEffect.clearScreen();
+
+            switch (choice){
+                case 1:
+                    User user = super.login(userList);
+                    if (user != null)
+                        customer_menu();
+                    break;
+                case 2:
+                    User newuser = super.register(userList);
+                    if (newuser != null)
+                        customer_menu();
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 3);
     }
     
-    public void login(){
-        super.login(userList);
+    public void customer_menu(){
+        int choice;
+        do {
+            DisplayEffect.clearScreen();
+            Scanner scanner = new Scanner(System.in);
+            
+            DisplayEffect.drawLine();
+            System.out.println("    Computer Retail Management System    ");
+            DisplayEffect.drawLine();
+            System.out.println("1. View Product");
+            System.out.println("2. View Cart");
+            System.out.println("3. Place Order");
+            System.out.println("4. View Order History");
+            System.out.println("5. Exit");
+            DisplayEffect.drawLine();
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice){
+                case 1:
+                    DisplayEffect.clearScreen();
+                    Product.getProductDetails();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    System.out.println("Exiting... Thank you!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 5);
     }
     
     @Override
     public String toString(){
-        return super.toString() +
-                ", customerID='" + customerID + '\'';    
+        return super.toString() + ", customerID='" + customerID + '\'';    
     }
 }
