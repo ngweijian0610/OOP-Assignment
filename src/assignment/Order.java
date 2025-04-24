@@ -10,26 +10,33 @@ public class Order {
     private double totalAmount;
     private Payment payment;
     
-    public enum OrderStatus { PENDING, PAID, SHIPPED, DELIVERED }
+    public enum OrderStatus { 
+        PENDING, PAID
+    }
     private OrderStatus orderStatus;
     
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     
     // constructors
     public Order(){
-        this(0.0);
+        this(null);
     }
-    public Order(double totalAmount) {
+    public Order(Cart cart) {
         this.orderID = IDGenerator.generate("ORD");
         this.orderDate = LocalDate.now();
-        this.totalAmount = totalAmount;
-//        this.totalAmount = cart.calculateTotal();
+        this.totalAmount = (cart != null) ? cart.getTotal() : 0.0;
         this.orderStatus = OrderStatus.PENDING;
     }
-    public Order(double totalAmount, Payment payment) {
-        this(totalAmount);
+    public Order(Cart cart, Payment payment) {
+        this(cart);
         this.payment = payment;
-        this.orderStatus = OrderStatus.PAID;
+        if (payment != null) {
+            // Process payment with the order amount
+            boolean paymentSuccessful = payment.processPayment(this.totalAmount);
+            if (paymentSuccessful) {
+                this.orderStatus = OrderStatus.PAID;
+            }
+        }
     }
     
     // getter
