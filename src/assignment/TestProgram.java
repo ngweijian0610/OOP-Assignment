@@ -10,10 +10,7 @@ public class TestProgram {
         
         Customer customer = new Customer();
         customer.register();   
-        for(User cust: customer.getUserList()){
-            System.out.println("12345"+cust);
-        }
         
-    }
-    
+        customer.login();
+    }   
 }
