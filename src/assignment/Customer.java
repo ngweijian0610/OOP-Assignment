@@ -10,11 +10,13 @@ public class Customer extends User {
     
     public Customer(){
         super();
+        this.customerID = IDGenerator.generate("CUST");
+        this.cart = new Cart();
     }
     // Constructor for register
      public Customer(String username, String password, String email){
         super(username, password, email, "customer");
-        this.customerID = generateCustomerID();
+        this.customerID = IDGenerator.generate("CUST");
         this.cart = new Cart();
     }
     
@@ -22,10 +24,6 @@ public class Customer extends User {
         super(username, password, email, "customer");
         this.customerID = customerID;
         this.cart = new Cart();
-    }
-    
-    private String generateCustomerID(){
-        return "C" + String.format("%04d", counter++);
     }
     
     // getter
