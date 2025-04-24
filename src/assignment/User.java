@@ -146,6 +146,7 @@ public class User {
         if (role.equals("admin")){
             newUser = new Admin(username, password, email);
         } else {
+            
             newUser = new Customer(username, password, email);
         }
         
