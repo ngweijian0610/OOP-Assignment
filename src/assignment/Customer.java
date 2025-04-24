@@ -73,6 +73,10 @@ public class Customer extends User {
         super.register(userList);
     }
     
+    public void login(){
+        super.login(userList);
+    }
+    
     @Override
     public String toString(){
         return super.toString() +
