@@ -17,9 +17,9 @@ public class User {
         this(" ", " ", " ", " ");
     }
     public User(String username, String password, String email, String role){
-        this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
+        this.username = username;
         this.role = role;
         this.isActive = true;
     }
@@ -76,18 +76,18 @@ public class User {
     
     //validation
     //email validation
-    private static boolean isValidEmail(String email){
+    protected static boolean isValidEmail(String email){
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         return pattern.matcher(email).matches();
     }
     
     //password validation
-    private static boolean isValidPassword(String password){
+    protected static boolean isValidPassword(String password){
         return password.length() >= 8 && password.length() <= 16;
     }
     
-    private static boolean isValidUsername(String username){
+    protected static boolean isValidUsername(String username){
         return username.length() >= 6 && username.length() <= 30;
     }
     
