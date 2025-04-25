@@ -69,6 +69,10 @@ public class Admin extends User {
         
     }
     
+    public void admin_menu(){
+        System.out.println("Hello");
+    }
+    
     @Override
     public String toString(){
         return super.toString() +

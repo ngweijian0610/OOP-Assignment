@@ -101,6 +101,27 @@ public class Product {
         } 
     }
     
+    public static Product mapProductID(String itemID){
+        try {
+            Scanner scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            while (scanner.hasNextLine()){
+                String[] fields = scanner.nextLine().split(",");
+                if (fields[0].equals(itemID)){
+                    String productName = fields[1];
+                    String category = fields[2];
+                    double price = Double.parseDouble(fields[3]);
+                    int warranty = fields.length > 5 ? Integer.parseInt(fields[4]) : 0;
+                    String description = fields.length > 4 ? fields[5] : "No description";
+
+                    return new Product(productName, description, price, category, warranty);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Can't open Product File!");
+        }
+        return null;
+    }
+    
     @Override
     public String toString(){
         return  "Product ID: " + productID +

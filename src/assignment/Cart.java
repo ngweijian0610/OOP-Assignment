@@ -29,7 +29,7 @@ public class Cart {
             }
         }
         items.add(new CartItem(product, quantity));
-        System.out.println(product.getProductName() + " added to cart.");
+        System.out.println("\nProduct (" + product.getProductName() + ") added to cart!");
     }
     
     // Remove item from cart
@@ -46,13 +46,21 @@ public class Cart {
     
     // View cart contents
     public void viewCart(){
+        int num = 1;
+        
         if(items.isEmpty())
             System.out.println("Your cart is empty.");
         else {
             System.out.println("Items in your cart:");
-            for(CartItem item : items)
-                System.out.println("- " + item);
-            System.out.println("Total: RM" + String.format("%.2f",getTotal()));
+            DisplayEffect.drawLine();
+            System.out.println("");
+            for(CartItem item : items) {
+                System.out.println(num + ". " + item);
+                num++;
+            }
+            System.out.println("");
+            DisplayEffect.drawLine();
+            System.out.println("Total: RM " + String.format("%.2f",getTotal()) + "\n");
         }
     }
     

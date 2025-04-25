@@ -13,6 +13,7 @@ public class User {
     protected String role;
     protected boolean isActive;
     protected static List<User> userList = new ArrayList<>();
+    static User newUser;
     
     // constructors
     public User(){
@@ -93,7 +94,7 @@ public class User {
         return username.length() >= 6 && username.length() <= 30;
     }
     
-    public void userAuthentication(){
+    public static void userAuthentication(){
         int choice;
         Scanner scanner = new Scanner(System.in);
         
@@ -134,6 +135,7 @@ public class User {
         String username;
         String password;
         String email;
+        String role;
         
         while (true){
             DisplayEffect.drawLine();
@@ -168,45 +170,62 @@ public class User {
             else
                 break;
         }
-        
-        User newUser;
+                
         newUser = new Customer(username, password, email);
-        
         userList.add(newUser);
         System.out.println("\nUser registered successfully!");
         return newUser;
     }
     
     //login
-    public static User login(){
-        Scanner sc = new Scanner(System.in);
-        Customer customer = new Customer();
-        
-        for (User user : userList){
-            while(true) {
-                DisplayEffect.drawLine();
-                System.out.println("                   Login                   ");
-                DisplayEffect.drawLine();
-                System.out.print("\nEnter username: ");
-                String username = sc.nextLine();
+    public static User login() {
+    Scanner sc = new Scanner(System.in);
+    Customer customer = new Customer();
+    Admin admin = new Admin();
 
-                System.out.print("Enter password: ");
-                String password = sc.nextLine();
-        
-                if (user.getUsername().equals(username)&& user.getPassword().equals(password)){
-                        System.out.println("\nLogin successful! Welcome, " + user.getUsername());
-                        customer.customer_menu();
-                        return user;
-                } else if (user.getUsername().equals(username) && !user.getPassword().equals(password))
-                    System.out.println("\nInvalid password.");
-                else
-                    System.out.println("\nUser not exists.");
-                
-                DisplayEffect.clearScreen();
-            }
-        }   
-        return null;
+    if (userList.isEmpty()) {
+        newUser = new Admin("admin", "admin123", "admin@gmail.com");
+        userList.add(newUser);
     }
+
+    while (true) {
+        DisplayEffect.drawLine();
+        System.out.println("                   Login                   ");
+        DisplayEffect.drawLine();
+        System.out.print("\nEnter username: ");
+        String username = sc.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = sc.nextLine();
+
+        boolean foundUser = false;
+        for (User user : userList) {
+            if (user.getUsername().equals(username)) {
+                foundUser = true;
+                if (user.getPassword().equals(password)) {
+                    System.out.println("\nLogin successful! Welcome, " + user.getUsername());
+                    if (user.isAdmin()) {
+                        admin.admin_menu();
+                    } else {
+                        customer.customer_menu();
+                    }
+                    return user;
+                } else {
+                    System.out.println("\nInvalid password.");
+                }
+                break;
+            }
+        }
+
+        if (!foundUser) {
+            System.out.println("\nUser not exists.");
+            DisplayEffect.clearScreen();
+            userAuthentication();
+        }
+
+        DisplayEffect.clearScreen();
+    }
+}
     
     public void updateProfile(){
         Scanner sc = new Scanner(System.in);
