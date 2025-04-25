@@ -27,8 +27,6 @@ public abstract class Payment {
         return paymentDate.format(DATE_FORMATTER);
     }
     
-    // setter
-    
     // other methods
     public abstract String getPaymentType();
     
