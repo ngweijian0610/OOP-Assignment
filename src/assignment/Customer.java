@@ -57,7 +57,7 @@ public class Customer extends User {
         cart.addItem(product, quantity);
     }
     
-    public void removeFromCart(String productID) {
+    public void removeFromCart(int productID) {
         cart.removeItem(productID);
     }
     

@@ -21,7 +21,7 @@ public class CartItem {
     
     // Setters
     public void setProduct(Product product){
-        
+        this.product = product;
     }
     
     public void setQuantity(int quantity){
@@ -33,7 +33,8 @@ public class CartItem {
         }
     }
     
-    public double getTotalPrice(){
+    // other methods
+    public double calculateSubtotal(){
         return product.getPrice() * quantity;
     }
     
@@ -41,6 +42,6 @@ public class CartItem {
     public String toString(){
         return product.getProductName() +
                 " x " + quantity + 
-                " = RM " + String.format("%.2f", getTotalPrice());
+                " = RM " + String.format("%.2f", calculateSubtotal());
     }
 }
