@@ -135,13 +135,6 @@ public class User {
         
         User newUser;
         newUser = new Customer(username, password, email);
-
-        if (role.equals("admin")){
-            newUser = new Admin(username, password, email);
-        } else {
-            
-            newUser = new Customer(username, password, email);
-        }
         
         userList.add(newUser);
         System.out.println("\nUser registered successfully!");
