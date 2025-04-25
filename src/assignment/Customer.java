@@ -7,6 +7,7 @@ public class Customer extends User {
     private String customerID;
     private Cart cart;
     private List<User> userList = new ArrayList<>();
+    private List<Product> productDetails = new ArrayList<>();
     
     public Customer(){
         super();
@@ -94,8 +95,11 @@ public class Customer extends User {
                 case 1:
                     DisplayEffect.clearScreen();
                     Product.getProductDetails();
+                    productSelectionMenu();
                     break;
                 case 2:
+                    DisplayEffect.clearScreen();
+                    viewCart();
                     break;
                 case 3:
                     break;
@@ -109,6 +113,46 @@ public class Customer extends User {
                     System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 5);
+    }
+    
+    public void productSelectionMenu(){
+        int choice;
+        int quantity;
+        String itemID;
+        Product product = new Product();
+        Scanner scan = new Scanner(System.in);
+        
+        System.out.println("\n1. Add to cart");
+        System.out.println("2. Order product");
+        System.out.println("3. Back");
+        System.out.print("\nEnter your choice: ");
+        choice = scan.nextInt();
+        
+        switch (choice){
+            case 1:
+                System.out.print("\nSelect product: ");
+                scan.nextLine();
+                itemID = scan.nextLine();
+                System.out.print("Enter quantity: ");
+                quantity = scan.nextInt();
+                Product productDetails = product.mapProductID(itemID);
+                
+                if (productDetails != null)
+                    addToCart(productDetails, quantity);
+                else 
+                    System.out.println("Product not found!");
+                
+                DisplayEffect.clearScreen();
+                Product.getProductDetails();
+                productSelectionMenu();
+                break;
+            case 2:
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
     }
     
     @Override
