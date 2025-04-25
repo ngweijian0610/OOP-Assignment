@@ -72,40 +72,6 @@ public class Customer extends User {
         cart.clearCart();
     }
     
-    public void UserAuthentication(){
-        int choice;
-        Scanner scanner = new Scanner(System.in);
-        
-        do {            
-            DisplayEffect.drawLine();
-            System.out.println("    Welcome to Computer Retail System    ");
-            DisplayEffect.drawLine();
-            System.out.println("1. Login");
-            System.out.println("2. Register");
-            System.out.println("3. Exit");
-            System.out.print("\nEnter your choice: ");
-            choice = scanner.nextInt();
-            DisplayEffect.clearScreen();
-
-            switch (choice){
-                case 1:
-                    User user = super.login(userList);
-                    if (user != null)
-                        customer_menu();
-                    break;
-                case 2:
-                    User newuser = super.register(userList);
-                    if (newuser != null)
-                        customer_menu();
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        } while (choice != 3);
-    }
-    
     public void customer_menu(){
         int choice;
         do {
@@ -119,7 +85,7 @@ public class Customer extends User {
             System.out.println("2. View Cart");
             System.out.println("3. Place Order");
             System.out.println("4. View Order History");
-            System.out.println("5. Exit");
+            System.out.println("5. Logout");
             DisplayEffect.drawLine();
             System.out.print("\nEnter your choice: ");
             choice = scanner.nextInt();
@@ -136,7 +102,8 @@ public class Customer extends User {
                 case 4:
                     break;
                 case 5:
-                    System.out.println("Exiting... Thank you!");
+                    System.out.println("\nLogged out... Thank you!");
+                    DisplayEffect.clearScreen();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");

@@ -1,5 +1,6 @@
 package assignment;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -11,6 +12,7 @@ public class User {
     protected String email;
     protected String role;
     protected boolean isActive;
+    protected static List<User> userList = new ArrayList<>();
     
     // constructors
     public User(){
@@ -91,8 +93,42 @@ public class User {
         return username.length() >= 6 && username.length() <= 30;
     }
     
+    public void userAuthentication(){
+        int choice;
+        Scanner scanner = new Scanner(System.in);
+        
+        do {            
+            DisplayEffect.drawLine();
+            System.out.println("    Welcome to Computer Retail System    ");
+            DisplayEffect.drawLine();
+            System.out.println("1. Login");
+            System.out.println("2. Register");
+            System.out.println("3. Exit");
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextInt();
+            DisplayEffect.clearScreen();
+
+            switch (choice){
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    User newuser = register();
+                    if (newuser != null) {
+                        DisplayEffect.clearScreen();
+                        login();
+                    }
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 3);
+    }
+    
     //register
-    public static User register(List<User> userList){
+    public static User register(){
         Scanner sc = new Scanner(System.in);
         
         String username;
@@ -101,7 +137,7 @@ public class User {
         
         while (true){
             DisplayEffect.drawLine();
-            System.out.println("                  Login                  ");
+            System.out.println("                 Register                  ");
             DisplayEffect.drawLine();
             System.out.print("\nEnter username: ");
             username = sc.nextLine();
@@ -135,13 +171,6 @@ public class User {
         
         User newUser;
         newUser = new Customer(username, password, email);
-
-        if (role.equals("admin")){
-            newUser = new Admin(username, password, email);
-        } else {
-            
-            newUser = new Customer(username, password, email);
-        }
         
         userList.add(newUser);
         System.out.println("\nUser registered successfully!");
@@ -149,24 +178,31 @@ public class User {
     }
     
     //login
-    public static User login(List<User> userList){
+    public static User login(){
         Scanner sc = new Scanner(System.in);
+        Customer customer = new Customer();
         
         for (User user : userList){
             while(true) {
-                System.out.print("Enter username: ");
+                DisplayEffect.drawLine();
+                System.out.println("                   Login                   ");
+                DisplayEffect.drawLine();
+                System.out.print("\nEnter username: ");
                 String username = sc.nextLine();
 
                 System.out.print("Enter password: ");
                 String password = sc.nextLine();
         
                 if (user.getUsername().equals(username)&& user.getPassword().equals(password)){
-                        System.out.println("Login successful! Welcome, " + user.getUsername());
+                        System.out.println("\nLogin successful! Welcome, " + user.getUsername());
+                        customer.customer_menu();
                         return user;
                 } else if (user.getUsername().equals(username) && !user.getPassword().equals(password))
-                    System.out.println("Invalid password.");
+                    System.out.println("\nInvalid password.");
                 else
-                    System.out.println("User not exists.");
+                    System.out.println("\nUser not exists.");
+                
+                DisplayEffect.clearScreen();
             }
         }   
         return null;

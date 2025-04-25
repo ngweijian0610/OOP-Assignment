@@ -83,7 +83,7 @@ public class Product {
             scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
             System.out.println("Product List:");
             System.out.println("+---------+-------------------------------------+-----------------+-----------+");
-            System.out.printf( "| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price");
+            System.out.printf( "| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price(RM) ");
             System.out.println("+---------+-------------------------------------+-----------------+-----------+");
             while(scanner.hasNextLine()){ //hasNextLine: if scan dao \n, will quit the looping 
                     String[] itemFields = scanner.nextLine().split("\\,");
