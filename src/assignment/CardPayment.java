@@ -12,11 +12,10 @@ public class CardPayment extends Payment {
     
     // constructors
     public CardPayment(){
-        this(0.0, " ", " ", " ", LocalDate.now().plusYears(1));
+        this(" ", " ", " ", LocalDate.now().plusYears(1));
     }
-    public CardPayment(double amount, 
-            String cardHolderName, String cardNumber, String cvv, LocalDate expiryDate){
-        super(amount);
+    public CardPayment(String cardHolderName, String cardNumber, String cvv, LocalDate expiryDate){
+        super();
         this.cardHolderName = cardHolderName;
         this.cardNumber = cardNumber;
         this.cvv = cvv;
@@ -64,7 +63,7 @@ public class CardPayment extends Payment {
     }
     
     @Override
-    public void processPayment() {
+    public boolean processPayment(double amount) {
         Scanner scanner = new Scanner(System.in);
         
         System.out.print("Enter card holder name: ");
@@ -96,9 +95,8 @@ public class CardPayment extends Payment {
         }
             
         if (!verified) {
-            this.paymentStatus = "Failed";
             System.out.println("Payment failed after 3 incorrect CVV attempts.");
-            return;
+            return false;
         }
 
         System.out.print("Enter expiry year (YYYY): ");
@@ -110,11 +108,11 @@ public class CardPayment extends Payment {
         this.expiryDate = LocalDate.of(year, month, 1);
 
         if (expiryDate.isBefore(LocalDate.now())) {
-            this.paymentStatus = "Failed";
             System.out.println("Card expired. Payment failed.");
+            return false;
         } else {
-            this.paymentStatus = "Success";
             System.out.println("Payment successful.");
+            return true;
         }
     }
     

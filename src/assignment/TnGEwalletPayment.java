@@ -10,11 +10,10 @@ public class TnGEwalletPayment extends Payment{
     
     // constructors
     public TnGEwalletPayment(){
-        this(0.0, " ", " ");
+        this(" ", " ");
     }
-    public TnGEwalletPayment(double paidAmount, 
-            String phoneNumber, String pin){
-        super(paidAmount);
+    public TnGEwalletPayment(String phoneNumber, String pin){
+        super();
         this.phoneNumber = phoneNumber;
         this.pin = pin;
     }
@@ -45,7 +44,7 @@ public class TnGEwalletPayment extends Payment{
     }
     
     @Override
-    public void processPayment(){
+    public boolean processPayment(double amount){
         Scanner scanner = new Scanner(System.in);
         
         do {
@@ -72,12 +71,12 @@ public class TnGEwalletPayment extends Payment{
             }
         }
 
-        if (verified && paidAmount > 0) {
-            this.paymentStatus = "Success";
+        if (verified && amount > 0) {
             System.out.println("Payment successful.");
+            return true;
         } else {
-            this.paymentStatus = "Failed";
             System.out.println("Payment failed.");
+            return false;
         }
     }
     

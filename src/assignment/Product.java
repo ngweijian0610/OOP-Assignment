@@ -7,27 +7,30 @@ import java.io.FileNotFoundException;
 
 public class Product {
     // data properties
-    private final String productID;
+    private int productID;
     private String productName;
     private String productDescription;
     private double price;
     private String category;
     private int warrantyMonths;
     
+    private static int count = 1000;
+    
     public Product(){
         this(" ", " ", 0.0, " ", 0);
     }
     public Product(String productName, String productDescription, double price, String category, int warrantyMonths){
-        this.productID = IDGenerator.generate("PRO");
+        this.productID = count;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
         this.category = category;
         this.warrantyMonths = warrantyMonths;
+        count++;
     }
     
     // getter
-    public String getProductID(){
+    public int getProductID(){
         return productID;
     }
     public String getProductName(){
@@ -47,6 +50,9 @@ public class Product {
     }
     
     // setter
+    public void setProductID(int productID){
+        this.productID = productID;
+    }
     public void setProductName(String productName){
         this.productName = productName;
     }
@@ -113,6 +119,7 @@ public class Product {
         }
     }
     
+    // wtf does this do
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
@@ -121,6 +128,7 @@ public class Product {
         return Objects.equals(productID, product.productID);
     }
     
+    // wtf does this do
     @Override
     public int hashCode(){
         return Objects.hash(productID);
