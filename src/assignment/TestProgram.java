@@ -9,8 +9,6 @@ public class TestProgram {
         Scanner scanner = new Scanner(System.in);
         
         Customer customer = new Customer();
-        customer.register();   
-        
-        customer.login();
+        customer.UserAuthentication();
     }   
 }

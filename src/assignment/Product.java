@@ -1,6 +1,9 @@
 package assignment;
 
 import java.util.Objects;
+import java.io.File;
+import java.util.*;
+import java.io.FileNotFoundException;
 
 public class Product {
     // data properties
@@ -79,6 +82,25 @@ public class Product {
     }
     
     // other methods
+    public static void getProductDetails(){
+        
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            System.out.println("Product List:");
+            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
+            System.out.printf( "| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price");
+            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
+            while(scanner.hasNextLine()){ //hasNextLine: if scan dao \n, will quit the looping 
+                    String[] itemFields = scanner.nextLine().split("\\,");
+                    System.out.printf("| %-7s | %-35s | %-15s | %-10s|\n", itemFields[0], itemFields[1], itemFields[2], itemFields[3]);
+            }
+            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
+        } catch (FileNotFoundException e) {
+            System.out.println("Can't open Product File!");
+        } 
+    }
+    
     @Override
     public String toString(){
         return  "Product ID: " + productID +
