@@ -22,7 +22,7 @@ public class Cart {
     // Add item to cart
     public void addItem(Product product, int quantity) {
         for(CartItem item : items){
-            if(item.getProduct().getProductID().equals(product.getProductID())){
+            if(item.getProduct().getProductID() == (product.getProductID())){
                 item.setQuantity(item.getQuantity() + quantity);
                 System.out.println("Increased quantity of " + product.getProductName() + " removed from cart.");
                 return;
@@ -33,9 +33,9 @@ public class Cart {
     }
     
     // Remove item from cart
-    public void removeItem(String productID) {
+    public void removeItem(int productID) {
         for(CartItem item : items){
-            if(item.getProduct().getProductID().equals(productID)){
+            if(item.getProduct().getProductID() == (productID)){
                 items.remove(item);
                 System.out.println(item.getProduct().getProductName() + " removed from cart." );
                 return;
@@ -59,7 +59,7 @@ public class Cart {
     public double getTotal(){
         double total = 0;
         for (CartItem item : items)
-            total += item.getTotalPrice();
+            total += item.calculateSubtotal();
         return total;
     }
     
