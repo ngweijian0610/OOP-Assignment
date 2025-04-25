@@ -1,40 +1,44 @@
 package assignment;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-public abstract class Payment {
+public abstract class Payment implements Payable {
     // data properties
     protected final String paymentID;
-    protected LocalDate paymentDate;
-    
-    protected static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    protected Order order;
     
     // constructors
     protected Payment(){
+        this(null);
+    }
+    protected Payment(Order order){
         this.paymentID = IDGenerator.generate("PAY");
-        this.paymentDate = LocalDate.now();
+        this.order = order;
     }
     
-    // getter
+    // getters
     public String getPaymentID(){
         return paymentID;
     }
-    public LocalDate getPaymentDate(){
-        return paymentDate;
+    
+    public Order getOrder() {
+        return order;
     }
-    public String getFormattedPaymentDate() {
-        return paymentDate.format(DATE_FORMATTER);
+    
+    // setters
+    public void setOrder(Order order) {
+        this.order = order;
     }
     
     // other methods
-    public abstract String getPaymentType();
-    
-    public abstract boolean processPayment(double amount);
-    
+    @Override
     public String toString() {
-        return "Payment ID: " + paymentID +
-               "\nMethod: " + getPaymentType() +
-               "\nDate: " + getFormattedPaymentDate();
+        if (order == null) {
+            return  "Payment ID: " + paymentID + 
+                    "\nMethod: " + getPaymentType() +
+                    "\nDate: No order attached";
+        } else {
+            return  "Payment ID: " + paymentID +
+                    "\nMethod: " + getPaymentType() +
+                    "\nDate: " + order.getFormattedDate();
+        }
     }
 }

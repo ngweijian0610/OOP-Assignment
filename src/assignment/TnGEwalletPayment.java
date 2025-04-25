@@ -7,11 +7,14 @@ public class TnGEwalletPayment extends Payment{
     // data properties
     private String phoneNumber;
     private String pin;
+    private static final int MAX_PIN_ATTEMPTS = 3;
+    private static final String PHONE_REGEX = "01[0,1,2,3,4,6,7,8,9][0-9]{7,8}";
     
     // constructors
     public TnGEwalletPayment(){
         this(" ", " ");
     }
+    
     public TnGEwalletPayment(String phoneNumber, String pin){
         super();
         this.phoneNumber = phoneNumber;
@@ -22,9 +25,19 @@ public class TnGEwalletPayment extends Payment{
     public String getPhoneNumber(){
         return phoneNumber;
     }
+    
     public String getMaskedPhoneNumber() {
+        if (phoneNumber == null || phoneNumber.length() < 3) {
+            return "Invalid phone number";
+        }
         return "*******" + phoneNumber.substring(phoneNumber.length() - 3);
     }
+    
+    // dk yao ma, i mark as private for now gua
+    private String getPin(){
+        return pin;
+    }
+    
     public String getMaskedPin(){
         return "******";
     }
@@ -33,6 +46,7 @@ public class TnGEwalletPayment extends Payment{
     public void setPhoneNumber(String phoneNumber){
         this.phoneNumber = phoneNumber;
     }
+    
     public void setPin(String pin){
         this.pin = pin;
     }
@@ -45,8 +59,14 @@ public class TnGEwalletPayment extends Payment{
     
     @Override
     public boolean processPayment(double amount){
+        if (amount <= 0) {
+            System.out.println("Invalid payment amount.");
+            return false;
+        }
+        
         Scanner scanner = new Scanner(System.in);
         
+        // Get and validate phone number
         do {
             System.out.print("Enter your phone number (Malaysian format 01XXXXXXXXX): ");
             this.phoneNumber = scanner.nextLine();
@@ -56,37 +76,41 @@ public class TnGEwalletPayment extends Payment{
             }
         } while (!isValidPhoneNumber(phoneNumber));
         
+        // Get and validate pin
         int attempts = 0;
         boolean verified = false;
         
-        while (attempts < 3){
+        while (attempts < MAX_PIN_ATTEMPTS){
             System.out.print("Enter your 6-digit PIN: ");
             String inputPin = scanner.nextLine();
-            if (verifyPin(inputPin)) {
+            
+            if (isValidPin(inputPin)) {
                 verified = true;
                 break;
             } else {
-                System.out.println("Incorrect PIN.");
+                System.out.println("Invalid PIN. " + (MAX_PIN_ATTEMPTS - attempts - 1) + " attempts remaining.");
                 attempts++;
             }
         }
-
-        if (verified && amount > 0) {
-            System.out.println("Payment successful.");
-            return true;
-        } else {
+        
+        // Process payment result
+        if (!verified) {
             System.out.println("Payment failed.");
             return false;
         }
+        
+        System.out.println();
+        System.out.println("Payment of RM" + String.format("%.2f", amount) + " successful.");
+        return true;
     }
     
     // Validation methods
     private boolean isValidPhoneNumber(String number) {
-        return Pattern.matches("01[0,1,2,3,4,6,7,8,9][0-9]{7,8}", number);
+        return Pattern.matches(PHONE_REGEX, number);
     }
-
-    public boolean verifyPin(String input) {
-        return this.pin != null && this.pin.equals(input);
+    
+    public boolean isValidPin(String inputPin) {
+        return inputPin != null && inputPin.matches("^\\d{6}$");
     }
     
     @Override
