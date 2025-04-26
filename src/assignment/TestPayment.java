@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class TestPayment {
     public static void main(String[] args) {
-//        testCardPayment();
-        testTnGEwalletPayment();
+        testCardPayment();
+//        testTnGEwalletPayment();
     }
 
     public static void testCardPayment() {

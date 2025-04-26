@@ -100,6 +100,8 @@ public class Customer extends User {
                 case 2:
                     DisplayEffect.clearScreen();
                     viewCart();
+                    if (!cart.isEmptyCart())
+                        cartSelectionMenu();
                     break;
                 case 3:
                     break;
@@ -150,6 +152,52 @@ public class Customer extends User {
                 break;
             case 3:
                 return;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+    
+    public void cartSelectionMenu(){
+        Scanner scan = new Scanner(System.in);
+        int choice;
+        
+        System.out.println("1. Place Order");
+        System.out.println("2. Back");
+        System.out.print("\nEnter your choice: ");
+        choice = scan.nextInt();
+        
+        switch (choice){
+            case 1:
+                orderMenu();
+                break;
+            case 2:
+                return;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+    
+    public void orderMenu(){
+        int choice;
+        Order order = new Order();
+        Scanner scanner = new Scanner(System.in);
+        
+        DisplayEffect.drawLine();
+        System.out.println("          PLACE ORDER          ");
+        DisplayEffect.drawLine();
+        viewCart();
+        System.out.println("Do you want to onfirm your order?");
+        System.out.println("1. Yes, place order");
+        System.out.println("2. No, go back");
+        System.out.print("\nEnter your choice: ");
+        choice = scanner.nextInt();
+        DisplayEffect.clearScreen();
+        
+        switch (choice){
+            case 1:
+                // order.processPayment();
+                break;
+            case 2:
             default:
                 System.out.println("Invalid choice. Please try again.");
         }

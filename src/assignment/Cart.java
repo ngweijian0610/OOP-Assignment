@@ -48,7 +48,7 @@ public class Cart {
     public void viewCart(){
         int num = 1;
         
-        if(items.isEmpty())
+        if(isEmptyCart())
             System.out.println("Your cart is empty.");
         else {
             System.out.println("Items in your cart:");
@@ -78,5 +78,9 @@ public class Cart {
     
     public List<CartItem> getItems(){
         return items;
+    }
+    
+    public boolean isEmptyCart(){
+        return items.isEmpty();
     }
 }

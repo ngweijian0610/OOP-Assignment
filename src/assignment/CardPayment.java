@@ -45,11 +45,6 @@ public class CardPayment extends Payment {
         return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
     }
     
-    // dk yao ma, i mark as private for now gua
-    private String getCVV(){
-        return cvv;
-    }
-    
     public String getMaskedCVV() {
         return "***";
     }
