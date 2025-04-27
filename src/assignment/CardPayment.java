@@ -12,6 +12,7 @@ public class CardPayment extends Payment {
     private String cardNumber;
     private String cvv;
     private LocalDate expiryDate;
+    private Cart cart;
     private static final int MAX_CVV_ATTEMPTS = 3;
     
     private static final DateTimeFormatter EXPIRY_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/yy");
@@ -19,6 +20,10 @@ public class CardPayment extends Payment {
     // constructors
     public CardPayment(){
         this(" ", " ", " ", LocalDate.now().plusYears(1));
+    }
+    
+    public CardPayment(Order order) {
+        super(order);
     }
     
     public CardPayment(String cardHolderName, String cardNumber, String cvv, LocalDate expiryDate){
@@ -75,13 +80,11 @@ public class CardPayment extends Payment {
     }
     
     // other methods
-    @Override
     public String getPaymentType() {
         return "Card Payment";
     }
     
-    @Override
-    public boolean processPayment(double amount) {
+    public boolean cardPayment(double amount) {
         if (amount <= 0) {
             System.out.println("Invalid payment amount.");
             return false;
@@ -162,7 +165,8 @@ public class CardPayment extends Payment {
         }
         
         System.out.println();
-        System.out.println("Payment of RM" + String.format("%.2f", amount) + " successful.");
+        System.out.println("Payment of RM " + String.format("%.2f", amount) + " successful.");
+        cart.clearCart();
         return true;
     }
     

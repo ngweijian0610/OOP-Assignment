@@ -1,16 +1,22 @@
 package assignment;
 
 public class CartItem {
+    private int number;
     private Product product;
     private int quantity;
     
     // Constructor
-    public CartItem(Product product, int quantity){
+    public CartItem(int number, Product product, int quantity){
+        this.number = number;
         this.product = product;
         setQuantity(quantity);
     }
     
     // Getters
+    public int getNumber(){
+        return number;
+    }
+    
     public Product getProduct(){
         return product;
     }
@@ -20,6 +26,9 @@ public class CartItem {
     }
     
     // Setters
+    public void setNumber(int number){
+        this.number = number;
+    }
     public void setProduct(Product product){
         this.product = product;
     }
