@@ -83,10 +83,8 @@ public class Product {
     
     // other methods
     public static void getProductDetails(){
-        
-        Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            Scanner scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
             System.out.println("Product List:");
             System.out.println("+---------+-------------------------------------+-----------------+-----------+");
             System.out.printf( "| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price(RM) ");
@@ -101,7 +99,7 @@ public class Product {
         } 
     }
     
-    public static Product mapProductID(String itemID){
+    public Product mapProductID(String itemID){
         try {
             Scanner scanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
             while (scanner.hasNextLine()){

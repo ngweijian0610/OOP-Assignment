@@ -2,6 +2,7 @@ package assignment;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Order {
     // data properties
@@ -9,7 +10,6 @@ public class Order {
     private LocalDate date;
     private double totalAmount;
     private Payment payment;
-    
     public enum OrderStatus { 
         PENDING, PAID, FAILED, CANCELLED
     }
@@ -25,21 +25,15 @@ public class Order {
     public Order(Cart cart) {
         this.orderID = IDGenerator.generate("ORD");
         this.date = LocalDate.now();
-        this.totalAmount = (cart != null) ? cart.getTotal() : 0.0;
+
+        if (cart != null)
+            this.totalAmount = cart.getTotal();
+        else
+            this.totalAmount = 0.0;
+
         this.orderStatus = OrderStatus.PENDING;
     }
-    
-    public Order(Cart cart, Payment payment) {
-        this(cart);
-        this.payment = payment;
-        if (payment != null) {
-            // Process payment with the order amount
-            boolean paymentSuccessful = payment.processPayment(this.totalAmount);
-            if (paymentSuccessful) {
-                this.orderStatus = OrderStatus.PAID;
-            }
-        }
-    }
+
     
     // getters
     public String getOrderID() {
@@ -87,24 +81,34 @@ public class Order {
     }
     
     // other methods
-    public boolean processPayment() {
-        if (payment == null) {
-            return false;
-        }
+    public void processPayment(){
+        int choice;
+        Scanner scanner = new Scanner(System.in);
         
-        boolean paymentSuccessful = payment.processPayment(this.totalAmount);
-        if (paymentSuccessful) {
-            this.orderStatus = OrderStatus.PAID;
-        } else {
-            this.orderStatus = OrderStatus.FAILED;
-        }
+        System.out.println("Select Payment Method");
+        DisplayEffect.drawLine();
+        System.out.println("1. Card Payment");
+        System.out.println("2. TNG E-wallet Payment");
+        System.out.println("3. Back");
+        System.out.print("\nEnter your choice: ");
+        choice = scanner.nextInt();
         
-        return paymentSuccessful;
+        switch (choice){
+            case 1:
+                Payment.processCardPayment(this, this.totalAmount);
+                break;
+            case 2:
+                Payment.processTnGEwalletPayment(this, this.totalAmount);
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
     }
     
     public boolean cancelOrder() {
         if (orderStatus == OrderStatus.PAID) {
-            // Refund de logic hmm
             return false;
         }
         
@@ -112,7 +116,6 @@ public class Order {
         return true;
     }
     
-    @Override
     public String toString() {
         return  "Order ID: " + orderID +
                 "\nOrder Date: " + getFormattedDate() +

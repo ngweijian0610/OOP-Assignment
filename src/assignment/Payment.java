@@ -1,9 +1,10 @@
 package assignment;
 
-public abstract class Payment implements Payable {
+public abstract class Payment {
     // data properties
     protected final String paymentID;
     protected Order order;
+    protected static String paymentMethod;
     
     // constructors
     protected Payment(){
@@ -13,7 +14,7 @@ public abstract class Payment implements Payable {
         this.paymentID = IDGenerator.generate("PAY");
         this.order = order;
     }
-    
+
     // getters
     public String getPaymentID(){
         return paymentID;
@@ -28,17 +29,33 @@ public abstract class Payment implements Payable {
         this.order = order;
     }
     
+    public static void processCardPayment(Order order, double amount) {
+        System.out.println("\n=== Card Payment ===");
+        
+        CardPayment c1 = new CardPayment(order);
+        paymentMethod = c1.getPaymentType();
+        boolean success = c1.cardPayment(amount);
+        System.out.println();
+        if (success == true)
+            System.out.println(c1);
+    }
+
+    public static void processTnGEwalletPayment(Order order, double amount) {
+        System.out.println("\n=== TNG eWallet Payment ===");
+        
+        TnGEwalletPayment e1 = new TnGEwalletPayment(order);
+        paymentMethod = e1.getPaymentType();
+        boolean success = e1.ewalletPayment(amount);
+        System.out.println();
+        if (success == true)
+            System.out.println(e1);
+    }
+    
     // other methods
     @Override
     public String toString() {
-        if (order == null) {
-            return  "Payment ID: " + paymentID + 
-                    "\nMethod: " + getPaymentType() +
-                    "\nDate: No order attached";
-        } else {
-            return  "Payment ID: " + paymentID +
-                    "\nMethod: " + getPaymentType() +
-                    "\nDate: " + order.getFormattedDate();
-        }
+        return "Payment ID: " + paymentID + 
+               "\nMethod: " + paymentMethod +
+               "\nDate: " + (order != null ? order.getFormattedDate() : "No order attached");
     }
 }
