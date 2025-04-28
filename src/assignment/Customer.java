@@ -103,6 +103,7 @@ public class Customer extends User {
                         cartSelectionMenu();
                     break;
                 case 3:
+                    viewOrderHistory();
                     break;
                 case 4:
                     System.out.println("\nLogged out... Thank you!");
@@ -224,6 +225,10 @@ public class Customer extends User {
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
+    }
+    
+    public void viewOrderHistory() {
+        Order.viewOrderHistory();
     }
     
     @Override
