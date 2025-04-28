@@ -183,10 +183,8 @@ public class User {
     Customer customer = new Customer();
     Admin admin = new Admin();
 
-    if (userList.isEmpty()) {
-        newUser = new Admin("admin", "admin123", "admin@gmail.com");
-        userList.add(newUser);
-    }
+    newUser = new Admin("admin", "admin123", "admin@gmail.com");
+    userList.add(newUser);
 
     while (true) {
         DisplayEffect.drawLine();
