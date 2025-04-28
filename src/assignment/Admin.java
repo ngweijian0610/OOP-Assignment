@@ -1,5 +1,11 @@
 package assignment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Admin extends User {
     // data properties
     private String adminID;
@@ -47,22 +53,98 @@ public class Admin extends User {
     }
     
     // other methods
-    public void viewAllOrders(){
+    public void addProduct() {
+        Scanner scanner = new Scanner(System.in);
+
+        DisplayEffect.clearScreen();
+        System.out.println("\n--- Add New Product ---");
+
+        // Get product name
+        System.out.print("Enter Product Name: ");
+        String productName = scanner.nextLine();
+        System.out.print("Enter Product Category: ");
+        String category = scanner.nextLine();
         
-    }
-    public void addProduct(){
+        // Get product price
+        double productPrice = 0.0;
+        while (true) {
+            try {
+                System.out.print("Enter Product Price: ");
+                productPrice = scanner.nextDouble();
+                scanner.nextLine();
+                if (productPrice < 0) {
+                    System.out.println("Price cannot be negative. Please try again.");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect input (Please enter a valid number for Price).");
+                scanner.nextLine();
+            }
+        }
         
+        int warrantyMonth;
+        while (true){
+            try {
+                System.out.print("Enter Warranty Period (Month): ");
+                warrantyMonth = scanner.nextInt();
+                
+                if (warrantyMonth < 1){
+                    System.out.println("Warranty Period cannot be negative. Please try again.");
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect input (Please enter a valid number for Warranty Period).");
+                scanner.nextLine();
+            }
+        }
+        
+        // Get product description
+        scanner.nextLine();
+        System.out.print("Enter Product Description: ");
+        String productDescription = scanner.nextLine();
+        
+        int maxProductId = 0;
+
+        // Read existing product IDs
+        try {
+            Scanner fileScanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            while (fileScanner.hasNextLine()) {
+                String[] itemFields = fileScanner.nextLine().split(",");
+                String productID = itemFields[0]; // Example: 1, 2, 3, ...
+                try {
+                    int idNumber = Integer.parseInt(productID); // directly parse to int
+                    if (idNumber > maxProductId) {
+                        maxProductId = idNumber;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid product ID format: " + productID);
+                }
+            }
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Product list file not found. Assuming first product.");
+        }
+
+        // After getting the largest product ID, generate new one
+        int newProductId = maxProductId + 1;
+
+        // Store product details into text file
+        try {
+            FileWriter writer = new FileWriter("C:/Users/Nelson/Downloads/productList.txt", true); // append mode
+            writer.write(newProductId + "," + productName + "," + category + "," + productPrice + "," + warrantyMonth + "," + productDescription + "\n");
+            writer.close();
+            System.out.println("\nProduct added successfully!");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the product.");
+        }
     }
+    
     public void updateProduct(){  // Product product
         
     }
     public void removeProduct(){
-        
-    }
-    public void manageInventory(){
-        
-    }
-    public void generateReport(){
         
     }
     public void manageUser(){
@@ -70,7 +152,25 @@ public class Admin extends User {
     }
     
     public void admin_menu(){
-        System.out.println("Hello");
+        int choice;
+        Scanner scanner = new Scanner(System.in);
+        
+        DisplayEffect.clearScreen();
+        DisplayEffect.drawLine();
+        System.out.println("ADMIN");
+        DisplayEffect.drawLine();
+        System.out.println("1. Add new product");
+        DisplayEffect.drawLine();
+        System.out.print("\nEnter your choice: ");
+        choice = scanner.nextInt();
+        
+        switch (choice){
+            case 1:
+                addProduct();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
     }
     
     @Override

@@ -7,14 +7,14 @@ import java.util.regex.Pattern;
 
 public class User {
     // data properties
+    protected static List<User> userList = new ArrayList<>();
     protected String username;
     protected String password;
     protected String email;
     protected String role;
     protected boolean isActive;
-    protected static List<User> userList = new ArrayList<>();
     static User newUser;
-    
+            
     // constructors
     public User(){
         this(" ", " ", " ", " ");
@@ -190,7 +190,7 @@ public class User {
 
     while (true) {
         DisplayEffect.drawLine();
-        System.out.println("                   Login                   ");
+        System.out.println("                   Login");
         DisplayEffect.drawLine();
         System.out.print("\nEnter username: ");
         String username = sc.nextLine();

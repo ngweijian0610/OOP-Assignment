@@ -36,8 +36,10 @@ public abstract class Payment {
         paymentMethod = c1.getPaymentType();
         boolean success = c1.cardPayment(amount);
         System.out.println();
-        if (success == true)
+        if (success == true) {
+            order.setOrderStatus(Order.OrderStatus.PAID);
             System.out.println(c1);
+        }
     }
 
     public static void processTnGEwalletPayment(Order order, double amount) {
@@ -47,8 +49,10 @@ public abstract class Payment {
         paymentMethod = e1.getPaymentType();
         boolean success = e1.ewalletPayment(amount);
         System.out.println();
-        if (success == true)
+        if (success == true) {
+            order.setOrderStatus(Order.OrderStatus.PAID);
             System.out.println(e1);
+        }
     }
     
     // other methods

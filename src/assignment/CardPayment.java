@@ -166,7 +166,6 @@ public class CardPayment extends Payment {
         
         System.out.println();
         System.out.println("Payment of RM " + String.format("%.2f", amount) + " successful.");
-        cart.clearCart();
         return true;
     }
     
