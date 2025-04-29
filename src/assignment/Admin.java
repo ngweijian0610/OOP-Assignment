@@ -52,7 +52,7 @@ public class Admin extends User {
         this.privilegeLevel = privilegeLevel;
     }
     
-    public void admin_login(){
+    public void adminLogin(){
         DisplayEffect.clearScreen();
         User.login();
     }
@@ -114,7 +114,7 @@ public class Admin extends User {
 
         // Read existing product IDs
         try {
-            Scanner fileScanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            Scanner fileScanner = new Scanner(new File("productList.txt"));
             while (fileScanner.hasNextLine()) {
                 String[] itemFields = fileScanner.nextLine().split("|");
                 String productID = itemFields[0]; // Example: 1, 2, 3, ...
@@ -137,7 +137,7 @@ public class Admin extends User {
 
         // Store product details into text file
         try {
-            FileWriter writer = new FileWriter("C:/Users/Nelson/Downloads/productList.txt", true); // append mode
+            FileWriter writer = new FileWriter("productList.txt", true); // append mode
             writer.write(newProductId + "|" + productName + "|" + category + "|" + productPrice + "|" + warrantyMonth + "|" + productDescription + "\n");
             writer.close();
             System.out.println("\nProduct added successfully!");
@@ -157,7 +157,7 @@ public class Admin extends User {
 
         // Load all existing products
         try {
-            Scanner fileScanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            Scanner fileScanner = new Scanner(new File("productList.txt"));
             while (fileScanner.hasNextLine()) {
                 productList.add(fileScanner.nextLine());
             }
@@ -259,7 +259,7 @@ public class Admin extends User {
 
         // Write all updated products back to file
         try {
-            FileWriter writer = new FileWriter("C:/Users/Nelson/Downloads/productList.txt", false); // overwrite mode
+            FileWriter writer = new FileWriter("productList.txt", false); // overwrite mode
             for (String productLine : productList) {
                 writer.write(productLine + "\n");
             }
@@ -283,7 +283,7 @@ public class Admin extends User {
 
         // Load all existing products
         try {
-            Scanner fileScanner = new Scanner(new File("C:/Users/Nelson/Downloads/productList.txt"));
+            Scanner fileScanner = new Scanner(new File("productList.txt"));
             while (fileScanner.hasNextLine()) {
                 productList.add(fileScanner.nextLine());
             }
@@ -337,7 +337,7 @@ public class Admin extends User {
 
         // Write updated products back to file
         try {
-            FileWriter writer = new FileWriter("C:/Users/Nelson/Downloads/productList.txt", false); // overwrite
+            FileWriter writer = new FileWriter("productList.txt", false); // overwrite
             for (String productLine : productList) {
                 writer.write(productLine + "\n");
             }
