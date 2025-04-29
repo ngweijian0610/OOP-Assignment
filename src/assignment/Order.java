@@ -17,7 +17,8 @@ public class Order {
     
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     protected Cart cart;
-    private String customerUsername;
+    private User user;
+    private static User customerPurchased;
     protected String orderDate;
 
     // constructors
@@ -25,7 +26,6 @@ public class Order {
         this.orderID = IDGenerator.generate("ORD");
         this.date = LocalDate.now();
         this.cart = cart;
-        this.customerUsername = customerUsername;
 
         if (cart != null)
             this.totalAmount = cart.getTotal();
@@ -52,8 +52,8 @@ public class Order {
         return orderStatus;
     }
     
-    public String getCustomerUsername() {
-        return customerUsername;
+    public static User getCustomerPurchased() {
+        return customerPurchased;
     }
     
     public Payment getPayment() {
@@ -82,6 +82,10 @@ public class Order {
         if (payment != null) {
             payment.setOrder(this);
         }
+    }
+    
+    public void setCustomerPurchased(User user){
+        this.customerPurchased = user;
     }
     
     // other methods

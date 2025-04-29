@@ -106,7 +106,7 @@ public class Customer extends User {
                         cartSelectionMenu();
                     break;
                 case 3:
-                    validateOrderHistory(this.username);
+                    validateOrderHistory(super.getCurrentUser());
                     break;
                 case 4:
                     System.out.println("\nLogged out... Thank you!");
@@ -224,6 +224,7 @@ public class Customer extends User {
                 DisplayEffect.clearScreen();
                 order.processPayment();
                 if (order.getOrderStatus() == Order.OrderStatus.PAID) {
+                    order.setCustomerPurchased(super.getCurrentUser());
                     saveOrder(order);
                 }
                 break;
@@ -238,12 +239,12 @@ public class Customer extends User {
         }
     }
     
-    public void validateOrderHistory(String loggedInUsername) {
+    public void validateOrderHistory(User user) {
         boolean found = false;
         for (Order order : orderHistory) {
-            if (order.getCustomerUsername().equals(loggedInUsername)) {
+            if (order.getCustomerPurchased().equals(user)) {
                 found = true;
-                System.out.println("Found orders for " + loggedInUsername + ":");
+                System.out.println("Found orders for " + user + ":");
                 System.out.println(order); // Display each order that matches the username
             }
         }
