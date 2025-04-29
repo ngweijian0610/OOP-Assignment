@@ -77,12 +77,12 @@ public class Customer extends User {
         cart.clearCart();
     }
     
-    public void customer_authentication(){
+    public void customerAuthentication(){
         DisplayEffect.clearScreen();
         user.userAuthentication();
     }
     
-    public void customer_menu(){
+    public void customerMenu(){
         int choice;
         do {
             DisplayEffect.clearScreen();
@@ -134,7 +134,8 @@ public class Customer extends User {
         
         System.out.println("\n1. Add to cart");
         System.out.println("2. Order product");
-        System.out.println("3. Back");
+        System.out.println("3. Sort products");
+        System.out.println("4. Back");
         System.out.print("\nEnter your choice: ");
         choice = scan.nextInt();
         
@@ -166,6 +167,12 @@ public class Customer extends User {
                 productSelectionMenu();
                 break;     
             case 3:
+                Product.productSortMenu();
+                DisplayEffect.clearScreen();
+                Product.getProductDetails();
+                productSelectionMenu();
+                break;
+            case 4:
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");

@@ -213,7 +213,7 @@ public class User {
                     if (user.isAdmin()) {
                         admin.admin_menu();
                     } else {
-                        customer.customer_menu();
+                        customer.customerMenu();
                     }
                     return user;
                 } else {

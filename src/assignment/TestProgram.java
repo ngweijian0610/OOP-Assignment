@@ -27,11 +27,11 @@ public class TestProgram {
                 switch (choice) {
                     case "1":
                         Customer customer = new Customer();
-                        customer.customer_authentication();
+                        customer.customerAuthentication();
                         break;
                     case "2":
                         Admin admin = new Admin();
-                        admin.admin_login();
+                        admin.adminLogin();
                         break;
                     case "3":
                         System.out.println("\n---------- Exiting Program ----------\n");
