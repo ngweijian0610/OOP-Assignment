@@ -1,15 +1,47 @@
 package assignment;
 
-// import java.util.Scanner;
-// chicken
+import java.util.Scanner;
 
 public class TestProgram {
     
     public static void main(String[] args) {
         // User Authentication Section
-        // Scanner scanner = new Scanner(System.in);
+        String choice;
+        Scanner scanner = new Scanner(System.in);
         
-        User user = new User();
-        user.userAuthentication();
+        OUTER:
+        while (true) {
+            DisplayEffect.drawLine();
+            System.out.println("               Select Role");
+            DisplayEffect.drawLine();
+            System.out.println("1. Customer");
+            System.out.println("2. Admin");
+            System.out.println("3. Exit");
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextLine();
+            
+            if (null == choice) {
+                System.out.println("Invalid choice. Please try again.");
+                DisplayEffect.clearScreen();
+            } else {
+                switch (choice) {
+                    case "1":
+                        Customer customer = new Customer();
+                        customer.customer_authentication();
+                        break;
+                    case "2":
+                        Admin admin = new Admin();
+                        admin.admin_login();
+                        break;
+                    case "3":
+                        System.out.println("\n---------- Exiting Program ----------\n");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        DisplayEffect.clearScreen();
+                        break;
+                }
+            }
+        }
     }   
 }

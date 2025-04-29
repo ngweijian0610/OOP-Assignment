@@ -52,6 +52,11 @@ public class Admin extends User {
         this.privilegeLevel = privilegeLevel;
     }
     
+    public void admin_login(){
+        DisplayEffect.clearScreen();
+        User.login();
+    }
+    
     // other methods
     public void addProduct() {
         Scanner scanner = new Scanner(System.in);
