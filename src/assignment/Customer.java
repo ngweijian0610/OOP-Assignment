@@ -6,7 +6,7 @@ public class Customer extends User {
     // data properties
     private String customerID;
     private final Cart cart;
-    private List<User> userList = new ArrayList<>();
+    private static List<Order> orderHistory = new ArrayList<>();
     
     public Customer(){
         super();
@@ -17,7 +17,6 @@ public class Customer extends User {
     // Constructor for register
     public Customer(String username, String password, String email, String customerID){
         super(username, password, email, "customer");
-        this.customerID = IDGenerator.generate("CUST");
         this.customerID = customerID;
         this.cart = new Cart();
     }
@@ -37,13 +36,21 @@ public class Customer extends User {
         return cart;
     }
     
-    public List<User> getUserList(){
-        return userList;
+    public static List<Order> getOrderHistory() {
+        return orderHistory;
     }
     
     // setter
     public void setCustomerID(String customerID){
         this.customerID = customerID;
+    }
+    
+    public static void setOrderHistory(List<Order> orders) {
+        orderHistory = orders;
+    }
+    
+    public void saveOrder(Order order) {
+        orderHistory.add(order);
     }
     
     public void viewCart(){
@@ -52,10 +59,6 @@ public class Customer extends User {
     
     public void addToCart(Product product, int quantity){
         cart.addItem(product, quantity);
-    }
-    
-    public void orderProduct(Product product, int quantity){
-        this.orderMenu();
     }
     
     public void removeFromCart(int itemNumber) {
@@ -103,7 +106,7 @@ public class Customer extends User {
                         cartSelectionMenu();
                     break;
                 case 3:
-                    viewOrderHistory();
+                    validateOrderHistory(super.getCurrentUser());
                     break;
                 case 4:
                     System.out.println("\nLogged out... Thank you!");
@@ -152,7 +155,6 @@ public class Customer extends User {
                 DisplayEffect.clearScreen();
                 Product.getProductDetails();
                 productSelectionMenu();
-                    
                 break;     
             case 3:
                 return;
@@ -198,7 +200,7 @@ public class Customer extends User {
     
     public void orderMenu(){
         int choice;
-        Order order = new Order(cart);
+        Order order = new Order(cart, this.username);
         Scanner scanner = new Scanner(System.in);
         
         DisplayEffect.clearScreen();
@@ -206,6 +208,11 @@ public class Customer extends User {
         System.out.println("               PLACE ORDER");
         DisplayEffect.drawLine();
         viewCart();
+        if (cart.isEmptyCart()) {
+            System.out.println("Cart is empty. Can't place order.");
+            return;
+        }
+        
         System.out.println("Do you want to confirm your order?");
         System.out.println("1. Yes, place order");
         System.out.println("2. No, go back");
@@ -216,19 +223,35 @@ public class Customer extends User {
             case 1:
                 DisplayEffect.clearScreen();
                 order.processPayment();
+                if (order.getOrderStatus() == Order.OrderStatus.PAID) {
+                    order.setCustomerPurchased(super.getCurrentUser());
+                    saveOrder(order);
+                }
                 break;
             case 2:
                 DisplayEffect.clearScreen();
                 viewCart();
                 if (!cart.isEmptyCart())
                     cartSelectionMenu();
+                break;
             default:
                 System.out.println("Invalid choice. Please try again.");
         }
     }
     
-    public void viewOrderHistory() {
-        Order.viewOrderHistory();
+    public void validateOrderHistory(User user) {
+        boolean found = false;
+        for (Order order : orderHistory) {
+            if (order.getCustomerPurchased().equals(user)) {
+                found = true;
+                System.out.println("Found orders for " + user + ":");
+                System.out.println(order); // Display each order that matches the username
+            }
+        }
+
+        if (!found) {
+            System.out.println("No orders found for the logged-in customer.");
+        }
     }
     
     @Override

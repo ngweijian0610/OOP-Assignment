@@ -1,10 +1,8 @@
 package assignment;
 
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.List;
 
 public class Order {
     // data properties
@@ -18,17 +16,13 @@ public class Order {
     private OrderStatus orderStatus;
     
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static List<Order> orderHistory = new ArrayList<>();
-    protected String custName;
     protected Cart cart;
+    private User user;
+    private static User customerPurchased;
     protected String orderDate;
 
     // constructors
-    public Order(){
-        this(null);
-    }
-    
-    public Order(Cart cart) {
+    public Order(Cart cart, String customerUsername) {
         this.orderID = IDGenerator.generate("ORD");
         this.date = LocalDate.now();
         this.cart = cart;
@@ -40,7 +34,6 @@ public class Order {
 
         this.orderStatus = OrderStatus.PENDING;
     }
-
     
     // getters
     public String getOrderID() {
@@ -57,6 +50,10 @@ public class Order {
     
     public OrderStatus getOrderStatus() {
         return orderStatus;
+    }
+    
+    public static User getCustomerPurchased() {
+        return customerPurchased;
     }
     
     public Payment getPayment() {
@@ -87,6 +84,10 @@ public class Order {
         }
     }
     
+    public void setCustomerPurchased(User user){
+        this.customerPurchased = user;
+    }
+    
     // other methods
     public void processPayment(){
         int choice;
@@ -103,11 +104,9 @@ public class Order {
         switch (choice){
             case 1:
                 Payment.processCardPayment(this, this.totalAmount);
-                orderHistory.add(this);
                 break;
             case 2:
                 Payment.processTnGEwalletPayment(this, this.totalAmount);
-                orderHistory.add(this);
                 break;
             case 3:
                 return;
@@ -127,18 +126,6 @@ public class Order {
         
         this.orderStatus = OrderStatus.CANCELLED;
         return true;
-    }
-    
-    public static void viewOrderHistory() {
-        if (orderHistory.isEmpty()) {
-            System.out.println("\nNo orders found.");
-        } else {
-            System.out.println("\n--- Order History ---");
-            for (Order order : orderHistory) {
-                System.out.println(order);
-                System.out.println(); // spacing
-            }
-        }
     }
     
     public String toString() {

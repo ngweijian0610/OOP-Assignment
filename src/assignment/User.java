@@ -14,6 +14,7 @@ public class User {
     protected String role;
     protected boolean isActive;
     static User newUser;
+    private static User currentUser;
             
     // constructors
     public User(){
@@ -29,7 +30,7 @@ public class User {
     
     // getter
     public String getUsername(){
-        return username;
+        return this.username;
     }
     public String getPassword(){
         return password;
@@ -39,6 +40,9 @@ public class User {
     }
     public String getRole(){
         return role;
+    }
+    public static User getCurrentUser() {
+        return currentUser;
     }
     
     public boolean isActive(){
@@ -57,6 +61,9 @@ public class User {
     }
     public void setRole(String role){
         this.role = role;
+    }
+    public static void setCurrentUser(User user) {
+        currentUser = user;
     }
     
     public void setActive(boolean active){
@@ -183,10 +190,8 @@ public class User {
     Customer customer = new Customer();
     Admin admin = new Admin();
 
-    if (userList.isEmpty()) {
-        newUser = new Admin("admin", "admin123", "admin@gmail.com");
-        userList.add(newUser);
-    }
+    newUser = new Admin("admin", "admin123", "admin@gmail.com");
+    userList.add(newUser);
 
     while (true) {
         DisplayEffect.drawLine();
@@ -204,6 +209,7 @@ public class User {
                 foundUser = true;
                 if (user.getPassword().equals(password)) {
                     System.out.println("\nLogin successful! Welcome, " + user.getUsername());
+                    setCurrentUser(user);
                     if (user.isAdmin()) {
                         admin.admin_menu();
                     } else {
