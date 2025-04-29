@@ -7,6 +7,7 @@ public class Customer extends User {
     private String customerID;
     private final Cart cart;
     private static List<Order> orderHistory = new ArrayList<>();
+    User user = new User();
     
     public Customer(){
         super();
@@ -76,6 +77,11 @@ public class Customer extends User {
         cart.clearCart();
     }
     
+    public void customer_authentication(){
+        DisplayEffect.clearScreen();
+        user.userAuthentication();
+    }
+    
     public void customer_menu(){
         int choice;
         do {
@@ -143,7 +149,10 @@ public class Customer extends User {
                 productDetails = product.mapProductID(itemID);
                 
                 if (productDetails != null)
-                    addToCart(productDetails, quantity);
+                    if (quantity > 0)
+                        addToCart(productDetails, quantity);
+                    else
+                        System.out.println("Quantity at least 1");
                 else 
                     System.out.println("Product not found!");
                 

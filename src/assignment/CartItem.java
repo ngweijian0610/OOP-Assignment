@@ -36,9 +36,6 @@ public class CartItem {
     public void setQuantity(int quantity){
         if (quantity > 0){
             this.quantity = quantity;
-        } else {
-            System.out.println("Quantity must be at least 1.");
-            this.quantity = 1;
         }
     }
     
