@@ -1,0 +1,20 @@
+1|Asus ROG Strix SCAR 16 2025|Laptop|21999|12|?
+2|Asus Zenbook A14 UX3407|Laptop|4999|12|?
+3|Dell Inspiron 14 5441|Laptop|5299|12|?
+4|HP Victus 16.1 inch Gaming|Laptop|3799|12|?
+5|MSI Stealth A16 AI+|Laptop|9799|12|?
+6|HP Laptop 14|Laptop|1949|12|?
+7|Acer Swift Go 14|Laptop|3299|12|?
+8|HP OMEN Transcend 14 inch|Laptop|7999|12|?
+9|Acer Swift 14 AI Intel|Laptop|4248|12|?
+10|Asus Vivobook 16 M1607|Laptop|3499|12|?
+11|Dell 14 Plus Laptop|Laptop|7695.0|12|?
+12|Nitro V 14 ANV14-61|Laptop|4899|12|?
+13|Apple MacBook Pro 14 inch M4|Laptop|6999|12|?
+14|Huawei MateBook D14 2024|Laptop|3199|12|?
+15|HONOR MagicBook Art 14|Laptop|5499|12|?
+16|MSI Cyborg 15 A13V|Laptop|3799|12|?
+17|Lenovo ThinkPad T14 Gen 5 Intel|Laptop|5849|12|?
+18|Acer Aspire Lite 16 AL16-52P|Laptop|2399|12|?
+19|MSI Thin A15 B7U|Laptop|2749|12|?
+20|Lenovo ThinkBook 16 Gen 7 AMD|Laptop|3829|12|?
