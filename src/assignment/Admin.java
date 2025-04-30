@@ -53,8 +53,69 @@ public class Admin extends User {
     }
     
     public void adminLogin(){
-        DisplayEffect.clearScreen();
-        User.login();
+        String choice;
+        Scanner scanner = new Scanner(System.in);
+        
+        do {
+            DisplayEffect.clearScreen();
+            DisplayEffect.drawLine();
+            System.out.println("               ADMIN LOGIN");
+            DisplayEffect.drawLine();
+            System.out.println("1. Login");
+            System.out.println("2. Back");
+            DisplayEffect.drawLine();
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextLine();
+            
+            switch (choice) {
+                case "1":
+                    DisplayEffect.clearScreen();
+                    if (attemptAdminLogin()) {
+                        adminMenu();
+                    }
+                    break;
+                case "2":
+                    DisplayEffect.clearScreen();
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (!choice.equals("2"));
+    }
+    
+    private boolean attemptAdminLogin() {
+        Scanner sc = new Scanner(System.in);
+        
+        DisplayEffect.drawLine();
+        System.out.println("                  ADMIN LOGIN");
+        DisplayEffect.drawLine();
+        System.out.print("\nEnter username: ");
+        String username = sc.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = sc.nextLine();
+
+        for (User user : userList) {
+            if (user.getUsername().equals(username)) {
+                if (user.getPassword().equals(password)) {
+                    if (user.isAdmin()) {
+                        System.out.println("\nAdmin login successful! Welcome, " + user.getUsername());
+                        setCurrentUser(user);
+                        return true;
+                    } else {
+                        System.out.println("\nError: This is not an admin account.");
+                        System.out.println("Please use customer login for customer accounts.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("\nInvalid password.");
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("\nAdmin account not found.");
+        return false;
     }
     
     // other methods
@@ -265,7 +326,7 @@ public class Admin extends User {
             }
             writer.close();
             System.out.println("\nProduct updated successfully!");
-            admin_menu();
+            adminMenu();
         } catch (IOException e) {
             System.out.println("An error occurred while updating the product.");
         }
@@ -347,13 +408,13 @@ public class Admin extends User {
         }
     }
     
-    public void admin_menu(){
+    public void adminMenu(){
         String choice;
         Scanner scanner = new Scanner(System.in);
         
         DisplayEffect.clearScreen();
         DisplayEffect.drawLine();
-        System.out.println("ADMIN");
+        System.out.println("                  ADMIN");
         DisplayEffect.drawLine();
         System.out.println("1. Add new product");
         System.out.println("2. Update product details");
@@ -374,11 +435,12 @@ public class Admin extends User {
                 removeProduct();
                 break;
             case "4":
-                System.out.println("\nLogged out... Thank you!");
+                System.out.println("\nLogging out... Thank you!");
                 DisplayEffect.clearScreen();
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                DisplayEffect.clearScreen();
         }
     }
     

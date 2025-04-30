@@ -3,6 +3,8 @@ package assignment;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Order {
     // data properties
@@ -18,20 +20,28 @@ public class Order {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     protected Cart cart;
     private User user;
-    private static User customerPurchased;
+    private User customerPurchased;
     protected String orderDate;
 
     // constructors
-    public Order(Cart cart, String customerUsername) {
+    public Order(Cart originalCart, String customerUsername) {
         this.orderID = IDGenerator.generate("ORD");
         this.date = LocalDate.now();
-        this.cart = cart;
-
-        if (cart != null)
-            this.totalAmount = cart.getTotal();
-        else
+        
+        // Create a deep copy of the cart
+        this.cart = new Cart();
+        
+        // Copy each item from the original cart to the order's cart
+        if (originalCart != null) {
+            for (CartItem item : originalCart.getItems()) {
+                // Create a copy of each items with the same product & quantity
+                this.cart.addItemsSilently(item.getProduct(), item.getQuantity());
+            }
+            this.totalAmount = originalCart.getTotal();
+        } else {
             this.totalAmount = 0.0;
-
+        }
+        
         this.orderStatus = OrderStatus.PENDING;
     }
     
@@ -52,7 +62,7 @@ public class Order {
         return orderStatus;
     }
     
-    public static User getCustomerPurchased() {
+    public User getCustomerPurchased() {
         return customerPurchased;
     }
     
@@ -62,6 +72,10 @@ public class Order {
     
     public double getTotalAmount() {
         return totalAmount;
+    }
+    
+    public Cart getCart() {
+        return this.cart;
     }
     
     // setters
@@ -89,7 +103,7 @@ public class Order {
     }
     
     // other methods
-    public void processPayment(){
+    public boolean processPayment(){
         String choice;
         Scanner scanner = new Scanner(System.in);
         
@@ -111,15 +125,14 @@ public class Order {
                 Payment.processTnGEwalletPayment(this, this.totalAmount);
                 break;
             case "3":
-                return;
+                return false;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                DisplayEffect.clearScreen();
                 processPayment();
         }
         
-        if (orderStatus == OrderStatus.PAID){
-            cart.clearCart();
-        }
+        return true;
     }
     
     public boolean cancelOrder() {
@@ -132,10 +145,11 @@ public class Order {
     }
     
     public String toString() {
-        return  "Order ID: " + orderID +
+        return  "--- Order Details ---" +
+                "\nOrder ID: " + orderID +
                 "\nOrder Date: " + getFormattedDate() +
                 "\nTotal Amount: " + String.format("RM%.2f", totalAmount) +
                 "\nOrder Status: " + orderStatus +
-                "\nPayment Info:\n" + ((payment != null) ? payment.toString() : "No payment attached");
+                "\n\n--- Payment Details ---\n" + ((payment != null) ? payment.toString() : "No payment attached");
     }
 }

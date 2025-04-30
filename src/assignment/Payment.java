@@ -30,7 +30,7 @@ public abstract class Payment {
     }
     
     public static void processCardPayment(Order order, double amount) {
-        System.out.println("\n=== Card Payment ===");
+        System.out.println("\n===== Card Payment =====");
         
         CardPayment c1 = new CardPayment(order);
         paymentMethod = c1.getPaymentType();
@@ -38,12 +38,13 @@ public abstract class Payment {
         System.out.println();
         if (success == true) {
             order.setOrderStatus(Order.OrderStatus.PAID);
+            order.setPayment(c1);
             System.out.println(c1);
         }
     }
 
     public static void processTnGEwalletPayment(Order order, double amount) {
-        System.out.println("\n=== TNG eWallet Payment ===");
+        System.out.println("\n===== TNG eWallet Payment =====");
         
         TnGEwalletPayment e1 = new TnGEwalletPayment(order);
         paymentMethod = e1.getPaymentType();
@@ -51,6 +52,7 @@ public abstract class Payment {
         System.out.println();
         if (success == true) {
             order.setOrderStatus(Order.OrderStatus.PAID);
+            order.setPayment(e1);
             System.out.println(e1);
         }
     }

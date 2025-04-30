@@ -14,6 +14,9 @@ public class Cart {
     
     // getter
     
+    public List<CartItem> getItems(){
+        return items;
+    }
     
     // setter
 
@@ -36,6 +39,22 @@ public class Cart {
         number++; // Increment the number for the new item
         items.add(new CartItem(number, product, quantity));
         System.out.println("\nProduct (" + product.getProductName() + ") added to cart!");
+    }
+    
+    public void addItemsSilently(Product product, int quantity) {
+        if (items == null){
+            number = 0;
+        }
+        for(CartItem item : items){
+            if(item.getProduct().getProductID() == product.getProductID()){
+                item.setQuantity(item.getQuantity() + quantity);
+                return;
+            }
+        }
+
+        // Increment the item number before adding the item to the cart
+        number++; // Increment the number for the new item
+        items.add(new CartItem(number, product, quantity));
     }
     
     // Remove item from cart
@@ -61,7 +80,7 @@ public class Cart {
     }
     
     // View cart contents
-    public void viewCart(){        
+    public void viewCart(){
         if(isEmptyCart())
             System.out.println("Your cart is empty.");
         else {
@@ -86,14 +105,14 @@ public class Cart {
         return total;
     }
     
+    public int getItemCount() {
+        return items.size();
+    }
+    
     public void clearCart(){
         number = 0;
         items.clear();
         System.out.println("\nAll item removed from cart.");
-    }
-    
-    public List<CartItem> getItems(){
-        return items;
     }
     
     public boolean isEmptyCart(){

@@ -9,7 +9,6 @@ public class Product implements Comparable<Product> {
     // data properties
     private int productID;
     private String productName;
-    private String productDescription;
     private double price;
     private String category;
     private int warrantyMonths;
@@ -18,7 +17,7 @@ public class Product implements Comparable<Product> {
     
     // enum for sorting criteria
     public enum SortCriteria {
-        ID, NAME, CATEGORY, PRICE
+        ID, NAME, CATEGORY, PRICE, WARRANTY
     }
     
     // current sorting criteria (default to ID)
@@ -26,13 +25,12 @@ public class Product implements Comparable<Product> {
     private static boolean ascending = true;
     
     public Product(){
-        this(" ", " ", 0.0, " ", 0);
+        this(" ", 0.0, " ", 0);
     }
     
-    public Product(String productName, String productDescription, double price, String category, int warrantyMonths){
+    public Product(String productName, double price, String category, int warrantyMonths){
         this.productID = count;
         this.productName = productName;
-        this.productDescription = productDescription;
         this.price = price;
         this.category = category;
         this.warrantyMonths = warrantyMonths;
@@ -40,10 +38,9 @@ public class Product implements Comparable<Product> {
     }
     
     // Constructor with specific ID
-    public Product(int productID, String productName, String productDescription, double price, String category, int warrantyMonths){
+    public Product(int productID, String productName, double price, String category, int warrantyMonths){
         this.productID = productID;
         this.productName = productName;
-        this.productDescription = productDescription;
         this.price = price;
         this.category = category;
         this.warrantyMonths = warrantyMonths;
@@ -53,18 +50,19 @@ public class Product implements Comparable<Product> {
     public int getProductID(){
         return productID;
     }
+    
     public String getProductName(){
         return productName;
     }
-    public String getProductDescription(){
-        return productDescription;
-    }
+    
     public double getPrice(){
         return price;
     }
+    
     public String getCategory(){
         return category;
     }
+    
     public int getWarrantyMonths(){
         return warrantyMonths;
     }
@@ -73,12 +71,9 @@ public class Product implements Comparable<Product> {
     public void setProductID(int productID){
         this.productID = productID;
     }
+    
     public void setProductName(String productName){
         this.productName = productName;
-    }
-    
-    public void setProductDescription(String productDescription){
-        this.productDescription = productDescription;
     }
     
     public void setPrice(double price){
@@ -124,6 +119,9 @@ public class Product implements Comparable<Product> {
             case PRICE:
                 result = Double.compare(this.price, other.price);
                 break;
+            case WARRANTY:
+                result = Integer.compare(this.warrantyMonths, other.warrantyMonths);
+                break;
             default:
                 result = Integer.compare(this.productID, other.productID);
         }
@@ -143,9 +141,8 @@ public class Product implements Comparable<Product> {
                 String category = fields[2];
                 double price = Double.parseDouble(fields[3]);
                 int warranty = fields.length > 4 ? Integer.parseInt(fields[4]) : 0;
-                String description = fields.length > 5 ? fields[5] : "No description";
                 
-                products.add(new Product(id, name, description, price, category, warranty));
+                products.add(new Product(id, name, price, category, warranty));
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -159,19 +156,21 @@ public class Product implements Comparable<Product> {
         Collections.sort(products); // Sort using the current criteria
         
         System.out.println("Product List:");
-        System.out.println("+---------+-------------------------------------+-----------------+-----------+");
-        System.out.printf("| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price(RM) ");
-        System.out.println("+---------+-------------------------------------+-----------------+-----------+");
+        System.out.println("+---------+--------------------------------------+-----------------+------------+------------------+");
+        System.out.printf("| %-7s | %-36s | %-15s | %-10s | %-17s|\n", 
+                "Item ID", "Item Name", "Category", "Price(RM)", "Warranty (months)");
+        System.out.println("+---------+--------------------------------------+-----------------+------------+------------------+");
         
         for (Product product : products) {
-            System.out.printf("| %-7d | %-35s | %-15s | %-10.2f|\n", 
+            System.out.printf("| %-7d | %-36s | %-15s | %-10.2f | %-17d|\n", 
                 product.getProductID(), 
                 product.getProductName(), 
                 product.getCategory(), 
-                product.getPrice());
+                product.getPrice(), 
+                product.getWarrantyMonths());
         }
         
-        System.out.println("+---------+-------------------------------------+-----------------+-----------+");
+        System.out.println("+---------+--------------------------------------+-----------------+------------+------------------+");
     }
     
     // Method to show product sorting menu
@@ -187,17 +186,18 @@ public class Product implements Comparable<Product> {
             System.out.println("2. Product Name");
             System.out.println("3. Category");
             System.out.println("4. Price");
-            System.out.println("5. Back");
+            System.out.println("5. Warranty");
+            System.out.println("6. Back");
             System.out.print("\nEnter your choice: ");
             
             try {
                 choice = scanner.nextInt();
                 
-                if (choice == 5) {
+                if (choice == 6) {
                     return;
                 }
                 
-                if (choice < 1 || choice > 5) {
+                if (choice < 1 || choice > 6) {
                     System.out.println("Invalid choice. Please enter 1-5.");
                     continue;
                 }
@@ -240,6 +240,9 @@ public class Product implements Comparable<Product> {
                     case 4:
                         setSortCriteria(SortCriteria.PRICE, asc);
                         break;
+                    case 5:
+                        setSortCriteria(SortCriteria.WARRANTY, asc);
+                        break;
                 }
 
                 DisplayEffect.clearScreen();
@@ -250,40 +253,12 @@ public class Product implements Comparable<Product> {
                 scanner.next(); // Clear the invalid input
                 choice = 0;     // Reset choice to show menu again
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
     
     public static void getProductDetails(){
         List<Product> products = loadProductsFromFile();
         displayProducts(products);
-        
-//        try {
-//
-//            Scanner scanner = new Scanner(new File("productList.txt"));
-//
-//            System.out.println("Product List:");
-//
-//            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
-//
-//            System.out.printf( "| %-7s | %-35s | %-15s | %-10s|\n", "Item ID", "Item Name", "Category", "Price(RM) ");
-//
-//            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
-//
-//            while(scanner.hasNextLine()){ //hasNextLine: if scan until \n, will quit the looping 
-//
-//                    String[] itemFields = scanner.nextLine().split("\\|");
-//
-//                    System.out.printf("| %-7s | %-35s | %-15s | %-10s|\n", itemFields[0], itemFields[1], itemFields[2], itemFields[3]);
-//
-//            }
-//
-//            System.out.println("+---------+-------------------------------------+-----------------+-----------+");
-//
-//        } catch (FileNotFoundException e) {
-//
-//            System.out.println("Can't open Product File!");
-//
-//        } 
     }
     
     public Product mapProductID(String itemID){
@@ -295,32 +270,12 @@ public class Product implements Comparable<Product> {
         }
         
         return null;
-        
-//        try {
-//            Scanner scanner = new Scanner(new File("productList.txt"));
-//            while (scanner.hasNextLine()){
-//                String[] fields = scanner.nextLine().split("\\|");
-//                if (fields[0].equals(itemID)){
-//                    String productName = fields[1];
-//                    String category = fields[2];
-//                    double price = Double.parseDouble(fields[3]);
-//                    int warranty = fields.length > 5 ? Integer.parseInt(fields[4]) : 0;
-//                    String description = fields.length > 4 ? fields[5] : "No description";
-//
-//                    return new Product(productName, description, price, category, warranty);
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Can't open Product File!");
-//        }
-//        return null;
     }
     
     @Override
     public String toString(){
         return  "Product ID: " + productID +
                 "\nProduct Name: " + productName +
-                "\nDescription: " + productDescription +
                 "\nPrice: RM " + String.format("%.2f", price) +
                 "\nCategory: " + category +
                 "\nWarranty Months: " + warrantyMonths + "months";

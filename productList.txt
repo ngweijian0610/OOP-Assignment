@@ -1,20 +1,30 @@
-1|Asus ROG Strix SCAR 16 2025|Laptop|21999.00|12|?
-2|Asus Zenbook A14 UX3407|Laptop|4999.00|12|?
-3|Dell Inspiron 14 5441|Laptop|5299.00|12|?
-4|HP Victus 16.1 inch Gaming|Laptop|3799.00|12|?
-5|MSI Stealth A16 AI+|Laptop|9799.00|12|?
-6|HP Laptop 14|Laptop|1949.00|12|?
-7|Acer Swift Go 14|Laptop|3299.00|12|?
-8|HP OMEN Transcend 14 inch|Laptop|7999.00|12|?
-9|Acer Swift 14 AI Intel|Laptop|4248.00|12|?
-10|Asus Vivobook 16 M1607|Laptop|3499.00|12|?
-11|Dell 14 Plus Laptop|Laptop|7695.00|12|?
-12|Nitro V 14 ANV14-61|Laptop|4899.00|12|?
-13|Apple MacBook Pro 14 inch M4|Laptop|6999.00|12|?
-14|Huawei MateBook D14 2024|Laptop|3199.00|12|?
-15|HONOR MagicBook Art 14|Laptop|5499.00|12|?
-16|MSI Cyborg 15 A13V|Laptop|3799.00|12|?
-17|Lenovo ThinkPad T14 Gen 5 Intel|Laptop|5849.00|12|?
-18|Acer Aspire Lite 16 AL16-52P|Laptop|2399.00|12|?
-19|MSI Thin A15 B7U|Laptop|2749.00|12|?
-20|Lenovo ThinkBook 16 Gen 7 AMD|Laptop|3829.00|12|?
+1|HP H2800 Stereo Headset|Accessories|119.00|6
+2|Acer Swift Go 14|Laptop|3299.00|12
+3|HP Pavilion Desktop TP01|Computer|2999.00|12
+4|Intel NUC 12 Pro Kit|Computer|3499.00|24
+5|Corsair MM350 Gaming Mouse Pad|Accessories|99.00|6
+6|Lenovo ThinkBook 16 Gen 7 AMD|Laptop|3829.00|24
+7|Dell Inspiron 14 5441|Laptop|5299.00|24
+8|MSI PRO DP21 12M Mini PC|Computer|2199.00|12
+9|Asus ROG Strix SCAR 16 2025|Laptop|21999.00|24
+10|Dell XPS Desktop 8960|Computer|8499.00|24
+11|TP-Link AX10 Wi-Fi 6 Router|Accessories|229.00|12
+12|ASUS ExpertCenter D5 Tower|Computer|2699.00|24
+13|HP OMEN Transcend 14 inch|Laptop|7999.00|24
+14|Dell 27 Monitor S2721DGF|Accessories|1299.00|36
+15|Lenovo Legion T5 Tower|Computer|6899.00|36
+16|Samsung Portable SSD T7 1TB|Accessories|489.00|36
+17|HP Victus 16.1 inch Gaming|Laptop|3799.00|12
+18|Kingston NV2 1TB NVMe SSD|Accessories|359.00|36
+19|HP Laptop 14|Laptop|1949.00|12
+20|Apple iMac 24-inch M3 Chip|Computer|6999.00|12
+21|Apple MacBook Pro 14 inch M4|Laptop|6999.00|36
+22|MSI Stealth A16 AI+|Laptop|9799.00|24
+23|HP Envy Desktop TE01|Computer|4799.00|12
+24|Logitech Z407 Bluetooth Speakers|Accessories|399.00|12
+25|AOC 24B2XH 24-inch Monitor|Accessories|499.00|24
+26|Lenovo ThinkCentre Neo 50s|Computer|2499.00|12
+27|Logitech MX Master 3S Wireless Mouse|Accessories|399.00|12
+28|Razer BlackWidow V4 Pro Keyboard|Accessories|899.00|24
+29|Acer Aspire C24 All-in-One|Computer|3299.00|12
+30|Asus Vivobook 16 M1607|Laptop|3499.00|12

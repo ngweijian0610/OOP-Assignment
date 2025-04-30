@@ -115,7 +115,7 @@ public class Customer extends User {
                     validateOrderHistory(super.getCurrentUser());
                     break;
                 case "4":
-                    System.out.println("\nLogged out... Thank you!");
+                    System.out.println("\nLogging out... Thank you!");
                     DisplayEffect.clearScreen();
                     return;
                 default:
@@ -133,45 +133,40 @@ public class Customer extends User {
         Scanner scan = new Scanner(System.in);
         
         System.out.println("\n1. Add to cart");
-        System.out.println("2. Order product");
-        System.out.println("3. Sort products");
-        System.out.println("4. Back");
+        System.out.println("2. Sort products");
+        System.out.println("3. Back");
         System.out.print("\nEnter your choice: ");
         choice = scan.nextLine();
         
         switch (choice){
             case "1":
-            case "2":
                 System.out.print("\nSelect product: ");
                 itemID = scan.nextLine();
                 System.out.print("Enter quantity: ");
                 quantity = scan.nextInt();
+                scan.nextLine();
+                
                 productDetails = product.mapProductID(itemID);
                 
-                if (productDetails != null)
+                if (productDetails != null) {
                     if (quantity > 0)
                         addToCart(productDetails, quantity);
                     else
                         System.out.println("Quantity at least 1");
-                else 
+                } else 
                     System.out.println("Product not found!");
-                
-                if (productDetails != null && choice.equals("2")){
-                    orderMenu();
-                    break;
-                }
                 
                 DisplayEffect.clearScreen();
                 Product.getProductDetails();
                 productSelectionMenu();
                 break;     
-            case "3":
+            case "2":
                 Product.productSortMenu();
                 DisplayEffect.clearScreen();
                 Product.getProductDetails();
                 productSelectionMenu();
                 break;
-            case "4":
+            case "3":
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
@@ -222,6 +217,8 @@ public class Customer extends User {
     
     public void orderMenu(){
         String choice;
+        
+        // Create a new order with a deep copy of the cart
         Order order = new Order(cart, this.username);
         Scanner scanner = new Scanner(System.in);
         
@@ -244,10 +241,17 @@ public class Customer extends User {
         switch (choice){
             case "1":
                 DisplayEffect.clearScreen();
-                order.processPayment();
+                if (!order.processPayment()) {
+                    DisplayEffect.clearScreen();
+                    viewCart();
+                    if (!cart.isEmptyCart())
+                        cartSelectionMenu();
+                    break;
+                }
                 if (order.getOrderStatus() == Order.OrderStatus.PAID) {
                     order.setCustomerPurchased(super.getCurrentUser());
                     saveOrder(order);
+                    cart.clearCart();
                 }
                 break;
             case "2":
@@ -263,17 +267,59 @@ public class Customer extends User {
     }
     
     public void validateOrderHistory(User user) {
+        DisplayEffect.clearScreen();
+        
+        DisplayEffect.drawLine();
+        System.out.println("              ORDER HISTORY");
+        DisplayEffect.drawLine();
+        System.out.println();
+        
         boolean found = false;
+        int orderCount = 0;
+        
+        System.out.println("Order(s) for " + user.getUsername() + ":\n");
+        DisplayEffect.drawLine();
+        
         for (Order order : orderHistory) {
             if (order.getCustomerPurchased().equals(user)) {
                 found = true;
-                System.out.println("Found orders for " + user + ":");
-                System.out.println(order); // Display each order that matches the username
+                orderCount++;
+                
+                System.out.println("\nORDER #" + orderCount + " - " + order.getFormattedDate());
+                System.out.println("---------------------");
+                System.out.println("Order ID: " + order.getOrderID());
+                System.out.println("Status: " + order.getOrderStatus());
+                
+                int itemCount = order.getCart().getItemCount();
+                System.out.printf("Items (%d):\n", itemCount);
+                
+                int itemNumber = 1;
+                for (CartItem item : order.getCart().getItems()) {
+                    System.out.printf("  %d. %s x %d = RM%.2f\n", 
+                            itemNumber++,
+                            item.getProduct().getProductName(),
+                            item.getQuantity(),
+                            item.calculateSubtotal());
+                }
+                
+                System.out.println("\nTotal: " + String.format("RM%.2f", order.getTotalAmount()));
+                
+                System.out.println("\n--- Payment Details ---");
+                Payment payment = order.getPayment();
+                System.out.println("Payment ID: " + payment.getPaymentID());
+                System.out.println("Method: " + Payment.paymentMethod);
+                
+                System.out.println();
+                DisplayEffect.drawLine();
             }
         }
 
         if (!found) {
-            System.out.println("No orders found for the logged-in customer.");
+            System.out.println("\nNo orders found for " + user.getUsername());
+        } else {
+            System.out.println("             Total Orders: " + orderCount);
+            DisplayEffect.drawLine();
+            System.out.println();
         }
     }
     
