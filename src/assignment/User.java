@@ -190,52 +190,50 @@ public class User {
     
     //login
     public static User login() {
-    Scanner sc = new Scanner(System.in);
-    Customer customer = new Customer();
-    Admin admin = new Admin();
+        Scanner sc = new Scanner(System.in);
+        Customer customer = new Customer();
 
-    newUser = new Admin("admin", "admin123", "admin@gmail.com");
-    userList.add(newUser);
+        newUser = new Admin("admin", "admin123", "admin@gmail.com");
+        userList.add(newUser);
 
-    while (true) {
-        DisplayEffect.drawLine();
-        System.out.println("                  Login");
-        DisplayEffect.drawLine();
-        System.out.print("\nEnter username: ");
-        String username = sc.nextLine();
+        while (true) {
+            DisplayEffect.drawLine();
+            System.out.println("                  Login");
+            DisplayEffect.drawLine();
+            System.out.print("\nEnter username: ");
+            String username = sc.nextLine();
 
-        System.out.print("Enter password: ");
-        String password = sc.nextLine();
+            System.out.print("Enter password: ");
+            String password = sc.nextLine();
 
-        boolean foundUser = false;
-        for (User user : userList) {
-            if (user.getUsername().equals(username)) {
-                foundUser = true;
-                if (user.getPassword().equals(password)) {
-                    System.out.println("\nLogin successful! Welcome, " + user.getUsername());
-                    setCurrentUser(user);
-                    if (user.isAdmin()) {
-                        admin.admin_menu();
+            boolean foundUser = false;
+            for (User user : userList) {
+                if (user.getUsername().equals(username)) {
+                    foundUser = true;
+                    if (user.getPassword().equals(password)) {
+                        System.out.println("\nLogin successful! Welcome, " + user.getUsername());
+                        setCurrentUser(user);
+                        if (user.isAdmin()) {
+                            new Admin().adminMenu();
+                        } else {
+                            customer.customerMenu();
+                        }
+                        return user;
                     } else {
-                        customer.customerMenu();
+                        System.out.println("\nInvalid password.");
                     }
-                    return user;
-                } else {
-                    System.out.println("\nInvalid password.");
+                    break;
                 }
-                break;
             }
-        }
 
-        if (!foundUser) {
-            System.out.println("\nUser not exists.");
+            if (!foundUser) {
+                System.out.println("\nUser not exists.");
+            }
+
             DisplayEffect.clearScreen();
-            userAuthentication();
+            return null;
         }
-
-        DisplayEffect.clearScreen();
     }
-}
     
     public void updateProfile(){
         Scanner sc = new Scanner(System.in);
