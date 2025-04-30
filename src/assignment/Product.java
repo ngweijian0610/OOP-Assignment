@@ -182,6 +182,7 @@ public class Product implements Comparable<Product> {
         int choice;
         do {
             System.out.println("\nSort Products By:");
+            System.out.println("-----------------");
             System.out.println("1. Product ID");
             System.out.println("2. Product Name");
             System.out.println("3. Category");
@@ -206,6 +207,7 @@ public class Product implements Comparable<Product> {
                 int orderChoice;
                 do {
                     System.out.println("\nSort Order:");
+                    System.out.println("-----------");
                     System.out.println("1. Ascending");
                     System.out.println("2. Descending");
                     System.out.print("\nEnter your choice: ");

@@ -348,7 +348,7 @@ public class Admin extends User {
     }
     
     public void admin_menu(){
-        int choice;
+        String choice;
         Scanner scanner = new Scanner(System.in);
         
         DisplayEffect.clearScreen();
@@ -361,19 +361,19 @@ public class Admin extends User {
         System.out.println("4. Logout");
         DisplayEffect.drawLine();
         System.out.print("\nEnter your choice: ");
-        choice = scanner.nextInt();
+        choice = scanner.nextLine();
         
         switch (choice){
-            case 1:
+            case "1":
                 addProduct();
                 break;
-            case 2:
+            case "2":
                 updateProduct();
                 break;
-            case 3:
+            case "3":
                 removeProduct();
                 break;
-            case 4:
+            case "4":
                 System.out.println("\nLogged out... Thank you!");
                 DisplayEffect.clearScreen();
                 return;

@@ -27,7 +27,7 @@ public class Cart {
         for(CartItem item : items){
             if(item.getProduct().getProductID() == product.getProductID()){
                 item.setQuantity(item.getQuantity() + quantity);
-                System.out.println("Increased quantity of " + product.getProductName() + " in cart.");
+                System.out.println("\nIncreased quantity of " + product.getProductName() + " in cart.");
                 return;
             }
         }

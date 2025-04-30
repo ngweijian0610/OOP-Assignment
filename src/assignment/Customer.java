@@ -83,7 +83,7 @@ public class Customer extends User {
     }
     
     public void customerMenu(){
-        int choice;
+        String choice;
         do {
             DisplayEffect.clearScreen();
             Scanner scanner = new Scanner(System.in);
@@ -97,35 +97,35 @@ public class Customer extends User {
             System.out.println("4. Logout");
             DisplayEffect.drawLine();
             System.out.print("\nEnter your choice: ");
-            choice = scanner.nextInt();
+            choice = scanner.nextLine();
 
             switch (choice){
-                case 1:
+                case "1":
                     DisplayEffect.clearScreen();
                     Product.getProductDetails();
                     productSelectionMenu();
                     break;
-                case 2:
+                case "2":
                     DisplayEffect.clearScreen();
                     viewCart();
                     if (!cart.isEmptyCart())
                         cartSelectionMenu();
                     break;
-                case 3:
+                case "3":
                     validateOrderHistory(super.getCurrentUser());
                     break;
-                case 4:
+                case "4":
                     System.out.println("\nLogged out... Thank you!");
                     DisplayEffect.clearScreen();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 5);
+        } while (choice != "4");
     }
     
     public void productSelectionMenu(){
-        int choice;
+        String choice;
         int quantity;
         String itemID;
         Product productDetails;
@@ -137,13 +137,12 @@ public class Customer extends User {
         System.out.println("3. Sort products");
         System.out.println("4. Back");
         System.out.print("\nEnter your choice: ");
-        choice = scan.nextInt();
+        choice = scan.nextLine();
         
         switch (choice){
-            case 1:
-            case 2:
+            case "1":
+            case "2":
                 System.out.print("\nSelect product: ");
-                scan.nextLine();
                 itemID = scan.nextLine();
                 System.out.print("Enter quantity: ");
                 quantity = scan.nextInt();
@@ -157,31 +156,34 @@ public class Customer extends User {
                 else 
                     System.out.println("Product not found!");
                 
-                if (productDetails != null && choice == 2){
-                        orderMenu();
-                        break;
+                if (productDetails != null && choice.equals("2")){
+                    orderMenu();
+                    break;
                 }
                 
                 DisplayEffect.clearScreen();
                 Product.getProductDetails();
                 productSelectionMenu();
                 break;     
-            case 3:
+            case "3":
                 Product.productSortMenu();
                 DisplayEffect.clearScreen();
                 Product.getProductDetails();
                 productSelectionMenu();
                 break;
-            case 4:
+            case "4":
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                DisplayEffect.clearScreen();
+                Product.getProductDetails();
+                productSelectionMenu();
         }
     }
     
     public void cartSelectionMenu(){
         Scanner scan = new Scanner(System.in);
-        int choice;
+        String choice;
         int ItemNumber;
         
         System.out.println("1. Place Order");
@@ -189,13 +191,13 @@ public class Customer extends User {
         System.out.println("3. Clear Cart");
         System.out.println("4. Back");
         System.out.print("\nEnter your choice: ");
-        choice = scan.nextInt();
+        choice = scan.nextLine();
         
         switch (choice){
-            case 1:
+            case "1":
                 orderMenu();
                 break;
-            case 2:
+            case "2":
                 System.out.print("\nItem to be removed: ");
                 ItemNumber = scan.nextInt();
                 removeFromCart(ItemNumber);
@@ -204,18 +206,22 @@ public class Customer extends User {
                 if (!cart.isEmptyCart())
                     cartSelectionMenu();
                 break;
-            case 3:
+            case "3":
                 clearCart();
                 break;
-            case 4:
+            case "4":
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                DisplayEffect.clearScreen();
+                viewCart();
+                if (!cart.isEmptyCart())
+                    cartSelectionMenu();
         }
     }
     
     public void orderMenu(){
-        int choice;
+        String choice;
         Order order = new Order(cart, this.username);
         Scanner scanner = new Scanner(System.in);
         
@@ -233,10 +239,10 @@ public class Customer extends User {
         System.out.println("1. Yes, place order");
         System.out.println("2. No, go back");
         System.out.print("\nEnter your choice: ");
-        choice = scanner.nextInt();
+        choice = scanner.nextLine();
         
         switch (choice){
-            case 1:
+            case "1":
                 DisplayEffect.clearScreen();
                 order.processPayment();
                 if (order.getOrderStatus() == Order.OrderStatus.PAID) {
@@ -244,7 +250,7 @@ public class Customer extends User {
                     saveOrder(order);
                 }
                 break;
-            case 2:
+            case "2":
                 DisplayEffect.clearScreen();
                 viewCart();
                 if (!cart.isEmptyCart())
@@ -252,6 +258,7 @@ public class Customer extends User {
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                orderMenu();
         }
     }
     
