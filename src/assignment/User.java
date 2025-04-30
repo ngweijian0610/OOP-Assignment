@@ -102,7 +102,7 @@ public class User {
     }
     
     public static void userAuthentication(){
-        int choice;
+        String choice;
         Scanner scanner = new Scanner(System.in);
         
         do {            
@@ -112,27 +112,31 @@ public class User {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Back");
+            DisplayEffect.drawLine();
             System.out.print("\nEnter your choice: ");
-            choice = scanner.nextInt();
-            DisplayEffect.clearScreen();
+            choice = scanner.nextLine();
 
             switch (choice){
-                case 1:
+                case "1":
+                    DisplayEffect.clearScreen();
                     login();
                     break;
-                case 2:
+                case "2":
+                    DisplayEffect.clearScreen();
                     User newuser = register();
                     if (newuser != null) {
                         DisplayEffect.clearScreen();
                         login();
                     }
                     break;
-                case 3:
+                case "3":
+                    DisplayEffect.clearScreen();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
+                    DisplayEffect.clearScreen();
             }
-        } while (choice != 3);
+        } while (choice != "3");
     }
     
     //register
@@ -146,7 +150,7 @@ public class User {
         
         while (true){
             DisplayEffect.drawLine();
-            System.out.println("                 Register                  ");
+            System.out.println("                 Register");
             DisplayEffect.drawLine();
             System.out.print("\nEnter username: ");
             username = sc.nextLine();
@@ -195,7 +199,7 @@ public class User {
 
     while (true) {
         DisplayEffect.drawLine();
-        System.out.println("                   Login");
+        System.out.println("                  Login");
         DisplayEffect.drawLine();
         System.out.print("\nEnter username: ");
         String username = sc.nextLine();

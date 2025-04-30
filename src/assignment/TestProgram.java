@@ -17,30 +17,26 @@ public class TestProgram {
             System.out.println("1. Customer");
             System.out.println("2. Admin");
             System.out.println("3. Exit");
+            DisplayEffect.drawLine();
             System.out.print("\nEnter your choice: ");
             choice = scanner.nextLine();
             
-            if (null == choice) {
-                System.out.println("Invalid choice. Please try again.");
-                DisplayEffect.clearScreen();
-            } else {
-                switch (choice) {
-                    case "1":
-                        Customer customer = new Customer();
-                        customer.customerAuthentication();
-                        break;
-                    case "2":
-                        Admin admin = new Admin();
-                        admin.adminLogin();
-                        break;
-                    case "3":
-                        System.out.println("\n---------- Exiting Program ----------\n");
-                        return;
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                        DisplayEffect.clearScreen();
-                        break;
-                }
+            switch (choice) {
+                case "1":
+                    Customer customer = new Customer();
+                    customer.customerAuthentication();
+                    break;
+                case "2":
+                    Admin admin = new Admin();
+                    admin.adminLogin();
+                    break;
+                case "3":
+                    System.out.println("\n---------- Exiting Program ----------\n");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    DisplayEffect.clearScreen();
+                    break;
             }
         }
     }   

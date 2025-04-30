@@ -90,28 +90,31 @@ public class Order {
     
     // other methods
     public void processPayment(){
-        int choice;
+        String choice;
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("Select Payment Method");
+        DisplayEffect.drawLine();
+        System.out.println("          Select Payment Method");
         DisplayEffect.drawLine();
         System.out.println("1. Card Payment");
         System.out.println("2. TNG E-wallet Payment");
         System.out.println("3. Back");
+        DisplayEffect.drawLine();
         System.out.print("\nEnter your choice: ");
-        choice = scanner.nextInt();
+        choice = scanner.nextLine();
         
         switch (choice){
-            case 1:
+            case "1":
                 Payment.processCardPayment(this, this.totalAmount);
                 break;
-            case 2:
+            case "2":
                 Payment.processTnGEwalletPayment(this, this.totalAmount);
                 break;
-            case 3:
+            case "3":
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
+                processPayment();
         }
         
         if (orderStatus == OrderStatus.PAID){
