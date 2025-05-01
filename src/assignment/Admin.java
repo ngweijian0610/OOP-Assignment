@@ -153,9 +153,9 @@ public class Admin extends User {
         
         do {
             DisplayEffect.clearScreen();
-            DisplayEffect.drawLine();
-            System.out.println("                  ADMIN");
-            DisplayEffect.drawLine();
+            System.out.println("====================================================================================================");
+            System.out.println("                                            Admin Panel");
+            System.out.println("====================================================================================================");
             System.out.println();
             
             displayProductList();
