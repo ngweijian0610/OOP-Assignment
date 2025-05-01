@@ -136,7 +136,7 @@ public class User {
                     System.out.println("Invalid choice. Please try again.");
                     DisplayEffect.clearScreen();
             }
-        } while (choice != "3");
+        } while (choice.equals("3"));
     }
     
     //register
@@ -146,22 +146,21 @@ public class User {
         String username;
         String password;
         String email;
-        String role;
+        
+        DisplayEffect.drawLine();
+        System.out.println("            CUSTOMER REGISTER");
+        DisplayEffect.drawLine();
+        System.out.println();
         
         while (true){
-            DisplayEffect.drawLine();
-            System.out.println("                 Register");
-            DisplayEffect.drawLine();
-            System.out.print("\nEnter username: ");
+            System.out.print("Enter username: ");
             username = sc.nextLine();
             if (!isValidUsername(username))
                 System.out.println("Username must be between 6-30 characters long.");
-            else if (userExists(username, userList))
+            else if (userExistsByUsername(username))
                 System.out.println("Username already exists. Please choose another.");
             else
                 break;
-            
-            DisplayEffect.clearScreen();
         }
         
         while (true){
@@ -178,13 +177,16 @@ public class User {
             email = sc.nextLine();
             if (!isValidEmail (email))
                 System.out.println("Invalid email format. Please enter a valid email."); 
+            else if (userExistsByEmail(email))
+                System.out.println("Email already exists. Please choose another");
             else
                 break;
         }
-                
-        newUser = new Customer(username, password, email);
+        
+        String customerID = IDGenerator.generate("CUS");
+        newUser = new Customer(username, password, email, "customer", customerID);
         userList.add(newUser);
-        System.out.println("\nUser registered successfully!");
+        System.out.println("\nUser registered successfully with ID: " + customerID);
         return newUser;
     }
     
@@ -192,13 +194,12 @@ public class User {
     public static User login() {
         Scanner sc = new Scanner(System.in);
         Customer customer = new Customer();
-
-        newUser = new Admin("admin", "admin123", "admin@gmail.com");
-        userList.add(newUser);
+        
+        User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));
 
         while (true) {
             DisplayEffect.drawLine();
-            System.out.println("                  Login");
+            System.out.println("             CUSTOMER LOGIN");
             DisplayEffect.drawLine();
             System.out.print("\nEnter username: ");
             String username = sc.nextLine();
@@ -211,18 +212,25 @@ public class User {
                 if (user.getUsername().equals(username)) {
                     foundUser = true;
                     if (user.getPassword().equals(password)) {
-                        System.out.println("\nLogin successful! Welcome, " + user.getUsername());
-                        setCurrentUser(user);
                         if (user.isAdmin()) {
-                            new Admin().adminMenu();
+                            System.out.println("\nError: Please use admin login for admin accounts.");
+                            DisplayEffect.clearScreen();
+                            return null;
+                        } else if (!user.isActive()) {
+                            System.out.println("\nThis account has been deactivated and cannot be used.");
+                            DisplayEffect.clearScreen();
+                            return null;
                         } else {
+                            System.out.println("\nLogin successful! Welcome, " + user.getUsername());
+                            setCurrentUser(user);
                             customer.customerMenu();
+                            return user;
                         }
-                        return user;
                     } else {
                         System.out.println("\nInvalid password.");
+                        DisplayEffect.clearScreen();
+                        return null;
                     }
-                    break;
                 }
             }
 
@@ -237,63 +245,113 @@ public class User {
     
     public void updateProfile(){
         Scanner sc = new Scanner(System.in);
+        boolean updated = false;
         
-        System.out.println("Updating profile for user: " + this.username);
+        System.out.println("\n--- Enter New Details (Press Enter to keep current value) ---");
         
-        //Update username
-        System.out.println("Enter new username: ");
-        String newUsername = sc.nextLine();
-        if (!newUsername.isEmpty()){
-            if(!isValidUsername(newUsername))
-                System.out.println("Password must be between 6-30 characters long.");
-            else {
-                this.username = newUsername;
-                System.out.println("Username update to: " + this.username);   
+        // Update username
+        while (true) {
+            System.out.print("Enter new username: ");
+            String newUsername = sc.nextLine();
+            
+            if (newUsername.isEmpty()) {
+                break; // Keep current username
             }
+            
+            if (!isValidUsername(newUsername)) {
+                System.out.println("Username must be between 6-30 characters long.");
+                continue;
+            }
+            
+            if (userExistsByUsername(newUsername) && !newUsername.equals(this.username)) {
+                System.out.println("Username already exists. Please choose another.");
+                continue;
+            }
+            
+            this.username = newUsername;
+            updated = true;
+            break;
         }
         
         //Update password
-        System.out.println("Enter new password: ");
-        String newPassword = sc.nextLine();
-        if(!newPassword.isEmpty()){
-            if(!isValidPassword(newPassword))
-                System.out.println("Password must be between 8-16 characters long.");
-            else {            
-                this.password = newPassword;
-                System.out.println("Password updated");
+        while (true) {
+            System.out.print("Enter new password: ");
+            String newPassword = sc.nextLine();
+            
+            if (newPassword.isEmpty()) {
+                break; // Keep current password
             }
+            
+            if (!isValidPassword(newPassword)) {
+                System.out.println("Password must be between 8-16 characters long.");
+                continue;
+            }
+
+            this.password = newPassword;
+            updated = true;
+            break;
         }
         
         //Update email
-        System.out.println("Enter new email: ");
-        String newEmail = sc.nextLine();
-        if(!newEmail.isEmpty()){
-            if (!isValidEmail(newEmail))
-                System.out.println("Invalid email format. Please enter a valid email."); 
-            else {
-            this.email = newEmail;
-            System.out.println("Email update to: " + this.email);
+        while (true) {
+            System.out.print("Enter new email: ");
+            String newEmail = sc.nextLine();
+            
+            if (newEmail.isEmpty()) {
+                break; // Keep current email
             }
+            
+            if (!isValidEmail(newEmail)) {
+                System.out.println("Invalid email format. Please enter a valid email.");
+                continue;
+            }
+
+            this.email = newEmail;
+            updated = true;
+            break;
         }
-        System.out.println("Profile updated successfully.");
+        
+        if (updated) {
+            System.out.println("\nProfile updated successfully.");
+        } else {
+            System.out.println("\nNo changes were made to your profile.");
+        }
     }
     
     //deactivate account
-    public void deactivateAccount(){
+    public boolean deactivateAccount(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Are you sure you want to deactivate your account? (yes/no): ");
         String choice = sc.nextLine().trim().toLowerCase();
         
         if(choice.equals("yes")){
             this.isActive = false;
-            System.out.println("Your account has been deactivated.");
+            for (int i = 0; i < userList.size(); i++) {
+                User user = userList.get(i);
+                if (user.getUsername().equals(this.username)) {
+                    user.setActive(false);
+                    userList.set(i, user);
+                    break;
+                }
+            }
+            System.out.println("\nAccount deactivated. Logging out ...");
+            return true;
         } else
-            System.out.println("Account deactivation cancelled.");
+            System.out.println("\nAccount deactivation cancelled.");
+            return false;
     }
     
-    private static boolean userExists(String username, List<User> userList){
+    private static boolean userExistsByUsername(String username){
         for (User user : userList){
             if (user.getUsername().equals(username))
+                return true;
+        }
+        return false;
+    }
+    
+    private static boolean userExistsByEmail(String email) {
+        for (User user : userList) {
+            if (user.getEmail().equalsIgnoreCase(email))
                 return true;
         }
         return false;
