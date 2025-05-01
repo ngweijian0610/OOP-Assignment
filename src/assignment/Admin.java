@@ -26,20 +26,41 @@ public class Admin extends User {
         this.privilegeLevel = 1;
     }
      
-    public Admin(String username, String password, String email, String adminID, int privilegeLevel){
+    public Admin(String username, String password, String email, 
+            String adminID, int privilegeLevel){
         super(username, password, email, "admin");
-        this.adminID = generateAdminID();
+        this.adminID = adminID;
         this.privilegeLevel = privilegeLevel;
     }
     
     private String generateAdminID(){
-        return "A" + String.format("%04d", counter++);
+        int maxID = 0;
+        for (User user : userList) {
+            if (user.isAdmin()) {
+                Admin admin = (Admin) user;
+                String adminID = admin.getAdminID();
+                if (adminID != null && adminID.startsWith("A")) {
+                    try {
+                        int idNum = Integer.parseInt(adminID.substring(1));
+                        if (idNum > maxID) {
+                            maxID = idNum;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Skip if format is not expected
+                    }
+                }
+            }
+        }
+        
+        counter = maxID + 1;
+        return "A" + String.format("%04d", counter);
     }
     
     // getter
     public String getAdminID(){
         return adminID;
     }
+    
     public int getPrivilegeLevel(){
         return privilegeLevel;
     }
@@ -48,8 +69,15 @@ public class Admin extends User {
     public void setAdminID(String adminID){
         this.adminID = adminID;
     }
+    
     public void setPrivilegeLevel(int privilegeLevel){
         this.privilegeLevel = privilegeLevel;
+    }
+    
+    // other methods
+    private void displayProductList() {
+        List<Product> products = Product.loadProductsFromFile();
+        Product.displayProducts(products);
     }
     
     public void adminLogin(){
@@ -59,7 +87,7 @@ public class Admin extends User {
         do {
             DisplayEffect.clearScreen();
             DisplayEffect.drawLine();
-            System.out.println("               ADMIN LOGIN");
+            System.out.println("          Welcome to Admin Side");
             DisplayEffect.drawLine();
             System.out.println("1. Login");
             System.out.println("2. Back");
@@ -86,8 +114,10 @@ public class Admin extends User {
     private boolean attemptAdminLogin() {
         Scanner sc = new Scanner(System.in);
         
+        User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));
+        
         DisplayEffect.drawLine();
-        System.out.println("                  ADMIN LOGIN");
+        System.out.println("               ADMIN LOGIN");
         DisplayEffect.drawLine();
         System.out.print("\nEnter username: ");
         String username = sc.nextLine();
@@ -103,8 +133,7 @@ public class Admin extends User {
                         setCurrentUser(user);
                         return true;
                     } else {
-                        System.out.println("\nError: This is not an admin account.");
-                        System.out.println("Please use customer login for customer accounts.");
+                        System.out.println("\nError: Please use customer login for customer accounts.");
                         return false;
                     }
                 } else {
@@ -118,7 +147,46 @@ public class Admin extends User {
         return false;
     }
     
-    // other methods
+    public void adminMenu(){
+        String choice;
+        Scanner scanner = new Scanner(System.in);
+        
+        do {
+            DisplayEffect.clearScreen();
+            DisplayEffect.drawLine();
+            System.out.println("                  ADMIN");
+            DisplayEffect.drawLine();
+            System.out.println();
+            
+            displayProductList();
+            System.out.println();
+            
+            System.out.println("1. ADD new product");
+            System.out.println("2. UPDATE product details");
+            System.out.println("3. REMOVE product");
+            System.out.println("4. Logout");
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextLine();
+            
+            switch (choice){
+                case "1":
+                    addProduct();
+                    break;
+                case "2":
+                    updateProduct();
+                    break;
+                case "3":
+                    removeProduct();
+                    break;
+                case "4":
+                    System.out.println("\nLogging out... Thank you!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (!choice.equals("4"));
+    }
+    
     public void addProduct() {
         Scanner scanner = new Scanner(System.in);
 
@@ -154,6 +222,7 @@ public class Admin extends User {
             try {
                 System.out.print("Enter Warranty Period (Month): ");
                 warrantyMonth = scanner.nextInt();
+                scanner.nextLine();
                 
                 if (warrantyMonth < 1){
                     System.out.println("Warranty Period cannot be negative. Please try again.");
@@ -166,45 +235,49 @@ public class Admin extends User {
             }
         }
         
-        // Get product description
-        scanner.nextLine();
-        System.out.print("Enter Product Description: ");
-        String productDescription = scanner.nextLine();
-        
         int maxProductId = 0;
 
         // Read existing product IDs
         try {
             Scanner fileScanner = new Scanner(new File("productList.txt"));
             while (fileScanner.hasNextLine()) {
-                String[] itemFields = fileScanner.nextLine().split("|");
-                String productID = itemFields[0]; // Example: 1, 2, 3, ...
-                try {
-                    int idNumber = Integer.parseInt(productID); // directly parse to int
-                    if (idNumber > maxProductId) {
-                        maxProductId = idNumber;
+                String line = fileScanner.nextLine();
+                if (!line.trim().isEmpty()) {
+                    String[] itemFields = line.split("\\|");
+                    if (itemFields.length > 0) {
+                        try {
+                            int idNumber = Integer.parseInt(itemFields[0].trim());
+                            if (idNumber > maxProductId)
+                                maxProductId = idNumber;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Warning: Invalid product ID format in line: " + line);
+                        }
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid product ID format: " + productID);
                 }
             }
             fileScanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("Product list file not found. Assuming first product.");
+            maxProductId = 0;
         }
 
         // After getting the largest product ID, generate new one
         int newProductId = maxProductId + 1;
+        
+        // Format price to always have 2 decimal places
+        String formattedPrice = String.format("%.2f", productPrice);
 
         // Store product details into text file
         try {
             FileWriter writer = new FileWriter("productList.txt", true); // append mode
-            writer.write(newProductId + "|" + productName + "|" + category + "|" + productPrice + "|" + warrantyMonth + "|" + productDescription + "\n");
+            writer.write(newProductId + "|" + productName + "|" + category + "|" + formattedPrice + "|" + warrantyMonth + "\n");
             writer.close();
-            System.out.println("\nProduct added successfully!");
+            System.out.println("\nProduct added successfully with ID: " + newProductId);
         } catch (IOException e) {
             System.out.println("An error occurred while saving the product.");
         }
+        
+        adminMenu();
     }
     
     public void updateProduct() {
@@ -244,7 +317,6 @@ public class Admin extends User {
                 System.out.println("Category: " + itemFields[2]);
                 System.out.println("Price: " + itemFields[3]);
                 System.out.println("Warranty Month: " + itemFields[4]);
-                System.out.println("Description: " + itemFields[5]);
 
                 // Ask for new details (blank to keep current)
                 System.out.println("\n--- Enter New Details (Press Enter to keep current value) ---");
@@ -299,12 +371,9 @@ public class Admin extends User {
                     }
                 }
 
-                System.out.print("Enter New Product Description: ");
-                String newDescription = scanner.nextLine();
-                if (newDescription.isEmpty()) newDescription = itemFields[5];
-
                 // Rebuild the updated product line
-                String updatedProduct = targetId + "|" + newName + "|" + newCategory + "|" + newPrice + "|" + newWarranty + "|" + newDescription;
+                String formattedPrice = String.format("%.2f", newPrice);
+                String updatedProduct = targetId + "|" + newName + "|" + newCategory + "|" + formattedPrice + "|" + newWarranty;
 
                 // Replace old line with updated one
                 productList.set(i, updatedProduct);
@@ -326,10 +395,11 @@ public class Admin extends User {
             }
             writer.close();
             System.out.println("\nProduct updated successfully!");
-            adminMenu();
         } catch (IOException e) {
             System.out.println("An error occurred while updating the product.");
         }
+        
+        adminMenu();
     }
 
     public void removeProduct() {
@@ -357,7 +427,7 @@ public class Admin extends User {
         // Ask for product ID to remove
         System.out.print("Enter Product ID to remove: ");
         int targetId = scanner.nextInt();
-        scanner.nextLine(); // clear buffer
+        scanner.nextLine();
 
         for (int i = 0; i < productList.size(); i++) {
             String[] itemFields = productList.get(i).split("\\|");
@@ -387,6 +457,7 @@ public class Admin extends User {
                 } else {
                     System.out.println("\nProduct removal cancelled.");
                 }
+                
                 break;
             }
         }
@@ -406,42 +477,8 @@ public class Admin extends User {
         } catch (IOException e) {
             System.out.println("An error occurred while updating the product list.");
         }
-    }
-    
-    public void adminMenu(){
-        String choice;
-        Scanner scanner = new Scanner(System.in);
         
-        DisplayEffect.clearScreen();
-        DisplayEffect.drawLine();
-        System.out.println("                  ADMIN");
-        DisplayEffect.drawLine();
-        System.out.println("1. Add new product");
-        System.out.println("2. Update product details");
-        System.out.println("3. Remove product");
-        System.out.println("4. Logout");
-        DisplayEffect.drawLine();
-        System.out.print("\nEnter your choice: ");
-        choice = scanner.nextLine();
-        
-        switch (choice){
-            case "1":
-                addProduct();
-                break;
-            case "2":
-                updateProduct();
-                break;
-            case "3":
-                removeProduct();
-                break;
-            case "4":
-                System.out.println("\nLogging out... Thank you!");
-                DisplayEffect.clearScreen();
-                return;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-                DisplayEffect.clearScreen();
-        }
+        adminMenu();
     }
     
     @Override

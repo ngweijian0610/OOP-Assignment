@@ -10,21 +10,22 @@ public class Customer extends User {
     User user = new User();
     
     public Customer(){
-        super();
-        this.customerID = IDGenerator.generate("CUST");
+        super(" ", " ", " ", "customer");
+        this.customerID = " ";
         this.cart = new Cart();
     }
     
     // Constructor for register
-    public Customer(String username, String password, String email, String customerID){
+    public Customer(String username, String password, String email, String role, 
+            String customerID){
         super(username, password, email, "customer");
         this.customerID = customerID;
         this.cart = new Cart();
     }
     
-    public Customer(String username, String password, String email){
+    public Customer(String username, String password, String email, String role){
         super(username, password, email, "customer");
-        this.customerID = IDGenerator.generate("CUST");
+        this.customerID = IDGenerator.generate("CUS");
         this.cart = new Cart();
     }
 
@@ -86,7 +87,17 @@ public class Customer extends User {
         String choice;
         do {
             DisplayEffect.clearScreen();
+            Product.resetSorting();
             Scanner scanner = new Scanner(System.in);
+            
+            // Display correct user details in the menu
+            User currentUser = User.getCurrentUser();
+            if (currentUser != null) {
+                this.username = currentUser.getUsername();
+                this.email = currentUser.getEmail();
+                this.password = currentUser.getPassword();
+                this.isActive = currentUser.isActive();
+            }
             
             DisplayEffect.drawLine();
             System.out.println("    Computer Retail Management System");
@@ -94,7 +105,8 @@ public class Customer extends User {
             System.out.println("1. View Product");
             System.out.println("2. View Cart");
             System.out.println("3. View Order History");
-            System.out.println("4. Logout");
+            System.out.println("4. My Account");
+            System.out.println("5. Logout");
             DisplayEffect.drawLine();
             System.out.print("\nEnter your choice: ");
             choice = scanner.nextLine();
@@ -115,26 +127,39 @@ public class Customer extends User {
                     validateOrderHistory(super.getCurrentUser());
                     break;
                 case "4":
+                    accountMenu();
+                    if (User.getCurrentUser() == null) {
+                        DisplayEffect.clearScreen();
+                        return;
+                    }
+                    break;
+                case "5":
                     System.out.println("\nLogging out... Thank you!");
                     DisplayEffect.clearScreen();
+                    User.setCurrentUser(null);
+                    User.userAuthentication();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != "4");
+        } while (true);
     }
     
     public void productSelectionMenu(){
         String choice;
         int quantity;
         String itemID;
+        String searchTerm;
         Product productDetails;
         Product product = new Product();
         Scanner scan = new Scanner(System.in);
         
+        List<Product> currentProducts = Product.loadProductsFromFile();
+        
         System.out.println("\n1. Add to cart");
-        System.out.println("2. Sort products");
-        System.out.println("3. Back");
+        System.out.println("2. Search products");
+        System.out.println("3. Sort products");
+        System.out.println("4. Back");
         System.out.print("\nEnter your choice: ");
         choice = scan.nextLine();
         
@@ -161,17 +186,85 @@ public class Customer extends User {
                 productSelectionMenu();
                 break;     
             case "2":
-                Product.productSortMenu();
+                System.out.print("\nEnter product name to search: ");
+                searchTerm = scan.nextLine();
+                
+                if (searchTerm.trim().isEmpty()) {
+                    System.out.println("\nSerach term cannot be empty!");
+                    DisplayEffect.clearScreen();
+                    Product.getProductDetails();
+                    productSelectionMenu();
+                    
+                    break;
+                } else {
+                    Product.resetSorting();
+                    List<Product> searchResults = Product.searchProductsByName(searchTerm);
+                    DisplayEffect.clearScreen();
+                    Product.displaySearchResults(searchResults, searchTerm);
+                    
+                    // Show menu for search results
+                    boolean stayInSearchMenu = true;
+                    while (stayInSearchMenu) {
+                        System.out.println("\n1. Add product to cart");
+                        System.out.println("2. Sort these results");
+                        System.out.println("3. Back to product menu");
+                        System.out.print("\nEnter your choice: ");
+                        choice = scan.nextLine();
+                        
+                        switch (choice) {
+                            case "1":
+                                System.out.print("\nSelect product: ");
+                                itemID = scan.nextLine();
+                                System.out.print("Enter quantity: ");
+                                quantity = scan.nextInt();
+                                scan.nextLine();
+
+                                productDetails = product.mapProductID(itemID);
+
+                                if (productDetails != null) {
+                                    if (quantity > 0)
+                                        addToCart(productDetails, quantity);
+                                    else
+                                        System.out.println("Quantity at least 1");
+                                } else 
+                                    System.out.println("Product not found!");
+                                
+                                break;
+                            case "2":
+                                Product.productSortMenu(searchResults, true, searchTerm);
+                                break;
+                            case "3":
+                                stayInSearchMenu = false;
+                                Product.resetSorting();
+                                break;
+                            default:
+                                System.out.println("Invalid choice. Please try again.");
+                        }
+                        
+                        if (stayInSearchMenu) {
+                            DisplayEffect.clearScreen();
+                            Product.displaySearchResults(searchResults, searchTerm);
+                        }
+                    }
+                    
+                    DisplayEffect.clearScreen();
+                    Product.getProductDetails();
+                    productSelectionMenu();
+                    
+                    break;
+                }
+            case "3":
+                Product.productSortMenu(currentProducts, false, " ");
                 DisplayEffect.clearScreen();
-                Product.getProductDetails();
+                Product.displayProducts(currentProducts);
                 productSelectionMenu();
                 break;
-            case "3":
+            case "4":
                 return;
             default:
                 System.out.println("Invalid choice. Please try again.");
                 DisplayEffect.clearScreen();
-                Product.getProductDetails();
+                Product.displayProducts(currentProducts);
                 productSelectionMenu();
         }
     }
@@ -226,6 +319,7 @@ public class Customer extends User {
         DisplayEffect.drawLine();
         System.out.println("               PLACE ORDER");
         DisplayEffect.drawLine();
+        System.out.println();
         viewCart();
         if (cart.isEmptyCart()) {
             System.out.println("Cart is empty. Can't place order.");
@@ -321,6 +415,48 @@ public class Customer extends User {
             DisplayEffect.drawLine();
             System.out.println();
         }
+    }
+    
+    public void accountMenu() {
+        Scanner scanner = new Scanner(System.in);
+        String choice;
+        
+        User currentUser = User.getCurrentUser();
+        
+        do {
+            DisplayEffect.clearScreen();
+            DisplayEffect.drawLine();
+            System.out.println("               MY ACCOUNT");
+            DisplayEffect.drawLine();
+            
+            System.out.println("Username: " + currentUser.getUsername());
+            System.out.println("Email: " + currentUser.getEmail());
+            System.out.println("Customer ID: " + ((Customer)currentUser).getCustomerID());
+            System.out.println("Account Status: " + (currentUser.isActive() ? "Active" : "Inactive"));
+            DisplayEffect.drawLine();
+            
+            System.out.println("\n1. Update Account Details");
+            System.out.println("2. Deactivate Account");
+            System.out.println("3. Back");
+            System.out.print("\nEnter your choice: ");
+            choice = scanner.nextLine();
+            
+            switch(choice) {
+                case "1":
+                    currentUser.updateProfile();
+                    break;
+                case "2":
+                    if (currentUser.deactivateAccount()) {
+                        User.setCurrentUser(null);
+                        return;
+                    }
+                    break;
+                case "3":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (!choice.equals("3"));
     }
     
     @Override

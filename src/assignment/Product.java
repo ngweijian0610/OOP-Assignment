@@ -96,10 +96,15 @@ public class Product implements Comparable<Product> {
         }
     }
     
-    // other methods
     public static void setSortCriteria(SortCriteria criteria, boolean asc) {
         currentSortCriteria = criteria;
         ascending = asc;
+    }
+    
+    // other methods
+    public static void resetSorting() {
+        currentSortCriteria = SortCriteria.ID;
+        ascending = true;
     }
     
     @Override
@@ -174,9 +179,12 @@ public class Product implements Comparable<Product> {
     }
     
     // Method to show product sorting menu
-    public static void productSortMenu() {
+    public static void productSortMenu(List<Product> productsToSort, boolean isSearchResult, String searchTerm) {
         Scanner scanner = new Scanner(System.in);
-        List<Product> products = loadProductsFromFile();
+        
+        // Save current sorting state
+        SortCriteria previousCriteria = currentSortCriteria;
+        boolean previousAscending = ascending;
         
         int choice;
         do {
@@ -187,18 +195,32 @@ public class Product implements Comparable<Product> {
             System.out.println("3. Category");
             System.out.println("4. Price");
             System.out.println("5. Warranty");
-            System.out.println("6. Back");
+            System.out.println("6. Default");
+            System.out.println(isSearchResult ? 
+                    "7. Back to search results" : "7. Back to product menu");
             System.out.print("\nEnter your choice: ");
             
             try {
                 choice = scanner.nextInt();
                 
-                if (choice == 6) {
+                if (choice == 7) {
                     return;
                 }
                 
-                if (choice < 1 || choice > 6) {
-                    System.out.println("Invalid choice. Please enter 1-5.");
+                if (choice == 6) {
+                    resetSorting();
+                    Collections.sort(productsToSort);
+                    DisplayEffect.clearScreen();
+                    if (isSearchResult) {
+                        // Get fresh search results if we're in search mode
+                        productsToSort = Product.searchProductsByName(searchTerm);
+                    }
+                    displayProducts(productsToSort);
+                    continue;
+                }
+                
+                if (choice < 1 || choice > 7) {
+                    System.out.println("Invalid choice. Please enter 1-7.");
                     continue;
                 }
                 
@@ -244,16 +266,16 @@ public class Product implements Comparable<Product> {
                         setSortCriteria(SortCriteria.WARRANTY, asc);
                         break;
                 }
-
+                
                 DisplayEffect.clearScreen();
-                displayProducts(products);
+                displayProducts(productsToSort);
                     
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a number (1-5).");
+                System.out.println("Please enter a number (1-7).");
                 scanner.next(); // Clear the invalid input
                 choice = 0;     // Reset choice to show menu again
             }
-        } while (choice != 6);
+        } while (choice != 7);
     }
     
     public static void getProductDetails(){
@@ -270,6 +292,32 @@ public class Product implements Comparable<Product> {
         }
         
         return null;
+    }
+    
+    public static List<Product> searchProductsByName(String searchTerm) {
+        List<Product> allProducts = loadProductsFromFile();
+        List<Product> matchingProducts = new ArrayList<>();
+        
+        String lowerCaseSearch = searchTerm.toLowerCase();
+        
+        for (Product product : allProducts) {
+            if (product.getProductName().toLowerCase().contains(lowerCaseSearch)) {
+                matchingProducts.add(product);
+            }
+        }
+        
+        return matchingProducts;
+    }
+    
+    public static void displaySearchResults(List<Product> products, String searchTerm) {
+        if (products.isEmpty()) {
+            System.out.println("\nNo products found matching: \"" + searchTerm + "\"");
+            return;
+        }
+        
+        System.out.println("\nSearch results for: \"" + searchTerm + "\"");
+        System.out.println("Found " + products.size() + " matching products(s).\n");
+        displayProducts(products);
     }
     
     @Override
