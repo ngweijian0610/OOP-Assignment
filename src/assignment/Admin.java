@@ -114,8 +114,6 @@ public class Admin extends User {
     private boolean attemptAdminLogin() {
         Scanner sc = new Scanner(System.in);
         
-        User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));
-        
         DisplayEffect.drawLine();
         System.out.println("               ADMIN LOGIN");
         DisplayEffect.drawLine();
@@ -209,7 +207,7 @@ public class Admin extends User {
         // Get and validate product category
         String category;
         do {
-            System.out.print("Enter Product Category: ");
+            System.out.print("Enter Product Category (Laptop/Computer/Accessories): ");
             category = scanner.nextLine().trim();
             
             if (category.isEmpty()) {
@@ -303,8 +301,6 @@ public class Admin extends User {
         } catch (IOException e) {
             System.out.println("An error occurred while saving the product.");
         }
-        
-        adminMenu();
     }
     
     public void updateProduct() {
@@ -352,17 +348,24 @@ public class Admin extends User {
                 
                 System.out.print("Enter New Product Name: ");
                 String newName = scanner.nextLine();
-                if (!newName.isEmpty()) {
+                if (newName.isEmpty()) {
+                    newName = itemFields[1];
+                } else {
                     while (newName.length() > 50) {
                         System.out.println("Invalid name! Must be less than or equal to 50 characters. Please try again.");
                         System.out.print("Enter New Product Name: ");
                         newName = scanner.nextLine();
+
+                        if (newName.isEmpty()) {
+                            newName = itemFields[1];
+                            break;
+                        }
                     }
+
+                    // Check if the new name is different from the original
                     if (!newName.equals(itemFields[1])) {
                         changed = true;
                     }
-                } else {
-                    newName = itemFields[1];
                 }
 
                 System.out.print("Enter New Product Category (Laptop/Computer/Accessories): ");
@@ -376,17 +379,17 @@ public class Admin extends User {
                         System.out.println("Invalid category. Must be Laptop, Computer, or Accessories. Please try again.");
                         System.out.print("Enter New Product Category (Laptop/Computer/Accessories): ");
                         newCategory = scanner.nextLine();
-                        
+
                         if (newCategory.isEmpty()) {
                             newCategory = itemFields[2];
                             break;
                         }
                     }
-                    
+
                     if (!newCategory.isEmpty()) {
                         newCategory = newCategory.substring(0, 1).toUpperCase() + newCategory.substring(1).toLowerCase();
                     }
-                    
+
                     if (!newCategory.equals(itemFields[2])) {
                         changed = true;
                     }
@@ -406,7 +409,8 @@ public class Admin extends User {
                         if (newPrice < 0) {
                             System.out.println("Price cannot be negative. Please try again.");
                         } else {
-                            if (newPrice != Double.parseDouble(itemFields[3])) {
+                            double originalPrice = Double.parseDouble(itemFields[3]);
+                            if (Math.abs(newPrice - originalPrice) > 0.001) {
                                 changed = true;
                             }
                             break;
@@ -430,7 +434,8 @@ public class Admin extends User {
                         if (newWarranty < 1) {
                             System.out.println("Warranty Period must be at least 1 month. Please try again.");
                         } else {
-                            if (newWarranty != Integer.parseInt(itemFields[4])) {
+                            int originalWarranty = Integer.parseInt(itemFields[4]);
+                            if (newWarranty != originalWarranty) {
                                 changed = true;
                             }
                             break;
@@ -471,8 +476,6 @@ public class Admin extends User {
                 System.out.println("An error occurred while updating the product.");
             }
         }
-        
-        adminMenu();
     }
 
     public void removeProduct() {
@@ -550,8 +553,6 @@ public class Admin extends User {
         } catch (IOException e) {
             System.out.println("An error occurred while updating the product list.");
         }
-        
-        adminMenu();
     }
     
     @Override

@@ -28,5 +28,3 @@
 28|Razer BlackWidow V4 Pro Keyboard|Accessories|899.00|24
 29|Acer Aspire C24 All-in-One|Computer|3299.00|12
 30|Asus Vivobook 16 M1607|Laptop|3499.00|12
-31|Lenovo IdeaPad Gaming 3 15ACH6|Laptop|3500.00|24
-32||Accessories|159.00|24

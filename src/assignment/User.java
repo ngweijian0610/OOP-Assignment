@@ -194,8 +194,6 @@ public class User {
     public static User login() {
         Scanner sc = new Scanner(System.in);
         Customer customer = new Customer();
-        
-        User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));
 
         while (true) {
             DisplayEffect.drawLine();
