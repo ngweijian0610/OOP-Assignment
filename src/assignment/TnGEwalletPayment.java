@@ -93,7 +93,7 @@ public class TnGEwalletPayment extends Payment{
         
         // Process payment result
         if (!verified) {
-            System.out.println("Payment failed.");
+            System.out.println("Payment failed after " + MAX_PIN_ATTEMPTS + " incorrect PIN attempts.");
             return false;
         } 
         

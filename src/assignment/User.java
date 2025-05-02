@@ -305,6 +305,11 @@ public class User {
                 System.out.println("Invalid email format. Please enter a valid email.");
                 continue;
             }
+            
+            if (userExistsByEmail(newEmail) && !newEmail.equals(this.username)) {
+                System.out.println("Email already exists. Please choose another.");
+                continue;
+            }
 
             this.email = newEmail;
             updated = true;
