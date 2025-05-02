@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class TestProgram {
     
     public static void main(String[] args) {
+        User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));
+        
         // User Authentication Section
         String choice;
         Scanner scanner = new Scanner(System.in);
