@@ -3,8 +3,6 @@ package assignment;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Order {
     // data properties
@@ -19,7 +17,6 @@ public class Order {
     
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     protected Cart cart;
-    private User user;
     private User customerPurchased;
     protected String orderDate;
 
@@ -144,6 +141,7 @@ public class Order {
         return true;
     }
     
+    @Override
     public String toString() {
         return  "--- Order Details ---" +
                 "\nOrder ID: " + orderID +

@@ -13,7 +13,7 @@ public class User {
     protected String email;
     protected String role;
     protected boolean isActive;
-    static User newUser;
+    private static User newUser;
     private static User currentUser;
             
     // constructors
@@ -32,44 +32,61 @@ public class User {
     public String getUsername(){
         return this.username;
     }
+    
     public String getPassword(){
         return password;
     }
-     public String getEmail(){
+    
+    public String getEmail(){
         return email;
     }
+    
     public String getRole(){
         return role;
-    }
-    public static User getCurrentUser() {
-        return currentUser;
     }
     
     public boolean isActive(){
         return isActive;
     }
     
+    public static User getNewUser() {
+        return newUser;
+    }
+    
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+    
     // setter
     public void setUsername(String username){
         this.username = username;
     }
+    
     public void setPassword(String password){
         this.password = password;
     }
+    
     public void setEmail(String email){
         this.email = email;
     }
+    
     public void setRole(String role){
         this.role = role;
-    }
-    public static void setCurrentUser(User user) {
-        currentUser = user;
     }
     
     public void setActive(boolean active){
         this.isActive = active;
     }
     
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+    
+    public static void setNewUser(User user) {
+        newUser = user;
+    }
+    
+    // other methods
     public boolean isAdmin(){
         return role.equalsIgnoreCase("admin");
     }

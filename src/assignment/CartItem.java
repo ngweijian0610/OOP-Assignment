@@ -6,6 +6,10 @@ public class CartItem {
     private int quantity;
     
     // Constructor
+    public CartItem() {
+        this(0, null, 0);
+    }
+    
     public CartItem(int number, Product product, int quantity){
         this.number = number;
         this.product = product;

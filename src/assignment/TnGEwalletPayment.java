@@ -8,7 +8,6 @@ public class TnGEwalletPayment extends Payment{
     private String phoneNumber;
     private String pin;
     private static final int MAX_PIN_ATTEMPTS = 3;
-    private Cart cart;
     private static final String PHONE_REGEX = "01[0,1,2,3,4,6,7,8,9][0-9]{7,8}";
     
     // constructors
