@@ -12,17 +12,37 @@ public class Cart {
         items = new ArrayList<>();
     }
     
+    public Cart(List<CartItem> items) {
+        this.number = items.size();
+        this.items = new ArrayList<>(items); // Defensive copy
+    }
+    
     // getter
+    public int getNumber() {
+        return number;
+    }
     
     public List<CartItem> getItems(){
         return items;
     }
     
     // setter
-
+    public void setNumber(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Number cannot be negative");
+        }
+        this.number = number;
+    }
+    
+    public void setItems(List<CartItem> items) {
+        if (items == null) {
+            throw new IllegalArgumentException("Items list cannot be null");
+        }
+        this.items = items;
+        this.number = items.size();
+    }
     
     // other methods
-    // Add item to cart
     public void addItem(Product product, int quantity) {
         if (items == null){
             number = 0;
@@ -117,5 +137,10 @@ public class Cart {
     
     public boolean isEmptyCart(){
         return items.isEmpty();
+    }
+    
+    @Override
+    public String toString() {
+        return "Total: RM " + String.format("%.2f", getTotal());
     }
 }

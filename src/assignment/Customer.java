@@ -190,7 +190,7 @@ public class Customer extends User {
                 searchTerm = scan.nextLine();
                 
                 if (searchTerm.trim().isEmpty()) {
-                    System.out.println("\nSerach term cannot be empty!");
+                    System.out.println("\nSearch term cannot be empty!");
                     DisplayEffect.clearScreen();
                     Product.getProductDetails();
                     productSelectionMenu();

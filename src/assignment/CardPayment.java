@@ -12,7 +12,6 @@ public class CardPayment extends Payment {
     private String cardNumber;
     private String cvv;
     private LocalDate expiryDate;
-    private Cart cart;
     private static final int MAX_CVV_ATTEMPTS = 3;
     
     private static final DateTimeFormatter EXPIRY_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/yy");
