@@ -2,7 +2,7 @@ package assignment;
 
 import java.util.Scanner;
 
-public class TestProgram {
+public class Assignment {
     
     public static void main(String[] args) {
         User.userList.add(new Admin("admin", "admin123", "admin@gmail.com"));

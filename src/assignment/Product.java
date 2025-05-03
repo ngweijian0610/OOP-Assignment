@@ -329,26 +329,11 @@ public class Product implements Comparable<Product> {
                 "\nWarranty Months: " + warrantyMonths + "months";
     }
     
-    public void applyDiscount(double percentage) {
-        if (percentage > 0 && percentage <= 100) {
-            this.price = this.price - (this.price * percentage / 100);
-        } else {
-            System.out.println("Invalid discount percentage. Must be between 0 and 100.");
-        }
-    }
-    
-    // wtf does this do (Good Question)
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
         Product product = (Product) obj;
         return Objects.equals(productID, product.productID);
-    }
-    
-    // wtf does this do (Good Question)
-    @Override
-    public int hashCode(){
-        return Objects.hash(productID);
     }
 }

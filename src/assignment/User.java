@@ -213,10 +213,12 @@ public class User {
                         if (user.isAdmin()) {
                             System.out.println("\nError: Please use admin login for admin accounts.");
                             DisplayEffect.clearScreen();
+                            userAuthentication();
                             return null;
                         } else if (!user.isActive()) {
                             System.out.println("\nThis account has been deactivated and cannot be used.");
                             DisplayEffect.clearScreen();
+                            userAuthentication();
                             return null;
                         } else {
                             System.out.println("\nLogin successful! Welcome, " + user.getUsername());
@@ -227,6 +229,7 @@ public class User {
                     } else {
                         System.out.println("\nInvalid password.");
                         DisplayEffect.clearScreen();
+                        userAuthentication();
                         return null;
                     }
                 }
@@ -237,6 +240,7 @@ public class User {
             }
 
             DisplayEffect.clearScreen();
+            userAuthentication();
             return null;
         }
     }
